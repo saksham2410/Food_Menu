@@ -54,7 +54,7 @@
     </form>
     <form
       class="form"
-      @submit.prevent="addNewTableElementBreakfast();addNewTableElementDinner();addNewTableElementLunch();"
+      @submit.prevent="addNewTableElementBreakfast();addNewTableElementDinner();addNewTableElementLunch();printData();"
     >
       Dinner-Menu :
       <div class="row">
@@ -167,6 +167,7 @@
                 <input type="submit" class="btn btn-block btn-success">
               </div>
             </div>
+            
           </div>
         </form>
       </template>
@@ -215,6 +216,9 @@ export default {
       );
       await this.retriveTableDataBreakfast();
     },
+    printData(){
+      console.log(this.newRowData);
+    },
     async addNewTableElementLunch() {
       await axios.post(`http://localhost:3000/lunch/insert`, this.newRowData);
       await this.retriveTableDataLunch();
@@ -252,6 +256,7 @@ export default {
       );
       this.tableSchema = tableSchema.data;
       this.tableData = tableData.data;
+      console.log(this.tableData);
       this.populateNewRowDataObjectFromSchema();
     },
     async retriveTableDataLunch() {
