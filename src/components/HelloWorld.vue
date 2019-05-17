@@ -27,40 +27,42 @@
             <v-flex xs12 md4>
               <v-select :items="items" label="User City" required></v-select>
             </v-flex>
-            
-            
           </v-layout>
         </v-container>
       </v-form>
       <v-flex xs12 v-for="index in tables" :key="index">
-
-        <table >
-
+        {{getIndex(index)}}
+        <table class="table">
           <template align="right">
             <tr>
-            <th>{{ getDate(date_picker, index) }}</th>
-            <th v-for="index in tables1" :key="index">Item {{index}}</th>
-          </tr>
-          <tr>
-            <th>Breakfast</th>
-            <td v-for="index in tables1" :key="index">
-              <input :name="index" type="text" class="input" v-model="table.breakfast.item[index-1]">
-            </td>
-          </tr>
+              <th>{{ getDate(date_picker, index) }}</th>
+              <th v-for="index in tables1" :key="index">Item {{index}}</th>
+            </tr>
+            <tr>
+              <th :v-model="meals[0]">Breakfast</th>
+              <td v-for="index in tables1" :key="index">
+                <input
+                  :name="index"
+                  type="text"
+                  class="input"
+                  v-model="table.breakfast.item[index-1]"
+                >
+              </td>
+            </tr>
 
-          <tr>
-            <th>Lunch</th>
-            <td v-for="index in tables1" :key="index">
-              <input :name="index" type="text" class="input" v-model="table.lunch.item[index-1]">
-            </td>
-          </tr>
+            <tr>
+              <th :v-model="meals[1]">Lunch</th>
+              <td v-for="index in tables1" :key="index">
+                <input :name="index" type="text" class="input" v-model="table.lunch.item[index-1]">
+              </td>
+            </tr>
 
-          <tr>
-            <th>Dinner</th>
-            <td v-for="index in tables1" :key="index">
-              <input :name="index" type="text" class="input" v-model="table.dinner.item[index-1]">
-            </td>
-          </tr>
+            <tr>
+              <th :v-model="meals[2]">Dinner</th>
+              <td v-for="index in tables1" :key="index">
+                <input :name="index" type="text" class="input" v-model="table.dinner.item[index-1]">
+              </td>
+            </tr>
           </template>
         </table>
         <br>
@@ -68,25 +70,25 @@
         <br>
       </v-flex>
       <br>
+      <button type="button" v-on:click="addNewTask()" class="btn btn-primary btn-block  mt-3">
+              Submit
+            </button>
+      <br>
       <v-flex xs12>
-        <v-date-picker
-          v-model="date_picker"
-          ref="picker"
-          min=""
-        ></v-date-picker>
+        <v-date-picker v-model="date_picker" ref="picker" min></v-date-picker>
       </v-flex>
     </v-layout>
 
     <v-btn fab @click="tables++">
-      Add Day <v-icon>add</v-icon>
+      Add Day
+      <v-icon>add</v-icon>
     </v-btn>
     <br>
 
     <v-btn fab @click="tables1++">
-      Add Items<v-icon>add</v-icon>
+      Add Items
+      <v-icon>add</v-icon>
     </v-btn>
-
-
 
     <span>{{ date_picker }}</span>
     <br>
@@ -95,35 +97,16 @@
 </template>
 
 <script>
-import axios from "axios" 
+import axios from "axios";
 export default {
   data() {
     return {
-      headers: [
-        {
-          text: "Add Calendar Here",
-          align: "left",
-          sortable: false,
-          value: "name"
-        },
-        { text: "Item1", value: "calories" },
-        { text: "Item2", value: "fat" },
-        { text: "Item3", value: "carbs" },
-        { text: "Item4", value: "protein" },
-        { text: "Item5", value: "iron" }
-      ],
-      meals: [
-        {
-          name: "Breakfast"
-        },
-        {
-          name: "Lunch"
-        },
-        {
-          name: "Dinner"
-        }
-      ],
+      meals: ["breakfast", "lunch", "dinner"],
       tables: 1,
+      meal_type:'',
+      breakfast_item:'',
+      lunch_item:'',
+      dinner_item:'',
       tables1: 2,
       table: {
         breakfast: {
@@ -137,13 +120,31 @@ export default {
         }
       },
 
-      items: ['Pune','Bengaluru','Hyderabad'],
-      items1: ['Zolo1','Zolo2','Zolo3','Zolo4'],
+      items: ["Pune", "Bengaluru", "Hyderabad"],
+      items1: ["Zolo1", "Zolo2", "Zolo3", "Zolo4"]
     };
   },
   methods: {
-    getDate(date, index){
-      return date + ' ' + (index - 1)
+    getIndex(index) {
+      return index;
+    },
+    getDate(date, index) {
+      return date + " " + (index - 1);
+    },
+    addNewTask() {
+      axios
+        .post("/api/menu", {
+          meal_type: this.meal_type,
+          breakfast_item: this.table.breakfast.item[index - 1],
+          lunch_item: this.table.lunch.item[index - 1],
+          dinner_item: this.table.dinner.item[index - 1]
+        })
+        .then(res => {
+          console.log(res);
+        })
+        .catch(err => {
+          console.log(err);
+        });
     }
   }
 };
