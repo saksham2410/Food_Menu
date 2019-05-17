@@ -3,7 +3,7 @@
     <input type="date" v-model="myDate">
     <br>This is:
     <span>{{myDate}}</span>
-
+<v-flex></v-flex>
     <form class="form" @submit.prevent="addNewTableElementBreakfast">
       Breakfast-Menu :
       <div class="row">
@@ -188,7 +188,7 @@ export default {
     }
   },
   async created() {
-    await Promise.all([this.retriveTableDataBreakfast(),this.retriveTableDataDinner(),this.retriveTableDataLunch()]);
+    await this.retriveTableDataBreakfast();
   },
   data() {
     return {
