@@ -1,10 +1,8 @@
 <template>
-  <div class="mt-5">
-
-      <input type="date" v-model="myDate">
-      <br>
-      This is:
-      <span>{{myDate}}</span>
+  <v-container class="mt-5">
+    <input type="date" v-model="myDate">
+    <br>This is:
+    <span>{{myDate}}</span>
 
     <form class="form" @submit.prevent="addNewTableElementBreakfast">
       Breakfast-Menu :
@@ -23,10 +21,10 @@
           </div>
         </template>
         <div :class="columnWidthClass">
-          <div class="form-group">
+          <!-- <div class="form-group">
             <label for></label>
             <input type="submit" class="btn btn-block btn-success">
-          </div>
+          </div>-->
         </div>
       </div>
     </form>
@@ -47,14 +45,17 @@
           </div>
         </template>
         <div :class="columnWidthClass">
-          <div class="form-group">
+          <!-- <div class="form-group">
             <label for></label>
             <input type="submit" class="btn btn-block btn-success">
-          </div>
+          </div>-->
         </div>
       </div>
     </form>
-    <form class="form" @submit.prevent="addNewTableElementDinner">
+    <form
+      class="form"
+      @submit.prevent="addNewTableElementBreakfast();addNewTableElementDinner();addNewTableElementLunch();"
+    >
       Dinner-Menu :
       <div class="row">
         <template v-for="column in tableSchema">
@@ -100,6 +101,7 @@
         <template v-for="(row, index) in tableData">
           <tr v-if="canShowRow(row)" :key="row.id">
             <td v-for="column in tableSchema" :key="column.Field">{{row[column.Field]}}</td>
+
             <td>
               <b-button-group size="sm">
                 <b-btn
@@ -141,7 +143,7 @@
       ref="updateRowModal"
       title="Update Row"
       @ok="updateTableRow"
-      @cancel="retriveTableData"
+      @cancel="retriveTableDataBreakfast"
     >
       <template v-if="currentRowIndex !== -1">
         <form class="form" @submit.prevent="updateTableRow">
@@ -169,7 +171,7 @@
         </form>
       </template>
     </b-modal>
-  </div>
+  </v-container>
 </template>
 
 <script>
@@ -186,11 +188,11 @@ export default {
     }
   },
   async created() {
-    await this.retriveTableData();
+    await Promise.all([this.retriveTableDataBreakfast(),this.retriveTableDataDinner(),this.retriveTableDataLunch()]);
   },
   data() {
     return {
-      myDate : new Date().toISOString().slice(0,10),
+      myDate: new Date().toISOString().slice(0, 10),
       tableSchema: [],
       tableData: [],
       newRowData: {},
@@ -211,29 +213,28 @@ export default {
         `http://localhost:3000/breakfast/insert`,
         this.newRowData
       );
-      await this.retriveTableData();
+      await this.retriveTableDataBreakfast();
     },
     async addNewTableElementLunch() {
-      await axios.post(
-        `http://localhost:3000/lunch/insert`,
-        this.newRowData
-      );
-      // await this.retriveTableData();
+      await axios.post(`http://localhost:3000/lunch/insert`, this.newRowData);
+      await this.retriveTableDataLunch();
     },
     async addNewTableElementDinner() {
-      await axios.post(
-        `http://localhost:3000/dinner/insert`,
-        this.newRowData
-      );
-      // await this.retriveTableData();
+      await axios.post(`http://localhost:3000/dinner/insert`, this.newRowData);
+      await this.retriveTableDataDinner();
     },
+    // postData() {
+    //   this.addNewTableElementBreakfast();
+    //   this.addNewTableElementLunch();
+    //   this.addNewTableElementDinner();
+    // },
     async updateTableRow() {
       this.$refs.updateRowModal.hide();
       await axios.patch(
         `http://localhost:3000/${this.tableName}/update`,
         this.tableData[this.currentRowIndex]
       );
-      await this.retriveTableData();
+      // await this.retriveTableData();
     },
     populateNewRowDataObjectFromSchema() {
       for (let i = 0; i < this.tableSchema.length; i++) {
@@ -242,12 +243,34 @@ export default {
           this.newRowData[this.tableSchema[i].Field] = "";
       }
     },
-    async retriveTableData() {
+    async retriveTableDataBreakfast() {
       const tableSchema = await axios.get(
-        `http://localhost:3000/${this.tableName}/schema`
+        `http://localhost:3000/breakfast/schema`
       );
       const tableData = await axios.get(
-        `http://localhost:3000/${this.tableName}`
+        `http://localhost:3000/breakfast`
+      );
+      this.tableSchema = tableSchema.data;
+      this.tableData = tableData.data;
+      this.populateNewRowDataObjectFromSchema();
+    },
+    async retriveTableDataLunch() {
+      const tableSchema = await axios.get(
+        `http://localhost:3000/lunch/schema`
+      );
+      const tableData = await axios.get(
+        `http://localhost:3000/lunch`
+      );
+      this.tableSchema = tableSchema.data;
+      this.tableData = tableData.data;
+      this.populateNewRowDataObjectFromSchema();
+    },
+    async retriveTableDataDinner() {
+      const tableSchema = await axios.get(
+        `http://localhost:3000/dinner/schema`
+      );
+      const tableData = await axios.get(
+        `http://localhost:3000/dinner`
       );
       this.tableSchema = tableSchema.data;
       this.tableData = tableData.data;
@@ -257,7 +280,7 @@ export default {
       await axios.delete(`http://localhost:3000/${this.tableName}/delete`, {
         data: { id: this.tableData[this.currentRowIndex].id }
       });
-      this.retriveTableData();
+      // this.retriveTableData();
     },
     canShowRow(row) {
       const filteredColumns = [];
