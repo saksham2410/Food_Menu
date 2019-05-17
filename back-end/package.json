@@ -1,5 +1,5 @@
 {
-  "name": "server",
+  "name": "vue-data-table-back-end",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -11,8 +11,6 @@
   "dependencies": {
     "cors": "^2.8.5",
     "express": "^4.16.4",
-    "mysql": "^2.17.1",
-    "mysql2": "^1.6.5",
-    "sequelize": "^5.8.6"
+    "mysql": "^2.16.0"
   }
 }
