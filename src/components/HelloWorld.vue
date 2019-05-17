@@ -21,15 +21,20 @@
             </v-flex>
 
             <v-flex xs12 md4>
-              <v-select :items="items1" label="User Hotel" required></v-select>
+              <v-select :items="items" label="User City" required></v-select>
             </v-flex>
 
             <v-flex xs12 md4>
-              <v-select :items="items" label="User City" required></v-select>
+              <v-select :items="items1" label="User Hotel" required></v-select>
             </v-flex>
           </v-layout>
         </v-container>
       </v-form>
+
+      <v-flex xs12>
+        <v-date-picker v-model="date_picker" ref="picker" min></v-date-picker>
+      </v-flex>
+
       <v-flex xs12 v-for="index in tables" :key="index">
         {{getIndex(index)}}
         <table class="table">
@@ -70,13 +75,8 @@
         <br>
       </v-flex>
       <br>
-      <button type="button" v-on:click="addNewTask()" class="btn btn-primary btn-block  mt-3">
-              Submit
-            </button>
+      <button type="button" v-on:click="addNewTask()" class="btn btn-primary btn-block mt-3">Submit</button>
       <br>
-      <v-flex xs12>
-        <v-date-picker v-model="date_picker" ref="picker" min></v-date-picker>
-      </v-flex>
     </v-layout>
 
     <v-btn fab @click="tables++">
@@ -103,10 +103,11 @@ export default {
     return {
       meals: ["breakfast", "lunch", "dinner"],
       tables: 1,
-      meal_type:'',
-      breakfast_item:'',
-      lunch_item:'',
-      dinner_item:'',
+      date_picker:'',
+      meal_type: "",
+      breakfast_item: "",
+      lunch_item: "",
+      dinner_item: "",
       tables1: 2,
       table: {
         breakfast: {
