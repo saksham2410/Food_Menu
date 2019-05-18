@@ -5,6 +5,36 @@
         <table>
           <tr>
             <th>
+              <input
+                type="text"
+                value="username"
+                placeholder="User Name"
+                v-model="userName"
+              >
+            </th>
+            <th>
+              <input
+                type="text"
+                value="usercity"
+                placeholder="User City"
+                v-model="userCity"
+              >
+            </th>
+            <th>
+              <input
+                type="text"
+                value="userhotel"
+                placeholder="User Hotel"
+                v-model="userHotel"
+              >
+            </th>
+          </tr>
+        </table>
+        <br>
+        <br>
+        <table>
+          <tr>
+            <th>
               <input type="date" v-model="selectedDate">
             </th>
             <th>Item 1</th>
@@ -48,7 +78,7 @@
             </td>
           </tr>
         </table>
-        <v-btn @click="addNewData">Add Data</v-btn>
+        <v-btn @click="addNewTableElementBreakfast">Add Data</v-btn>
         <br>
         <br>
         <br>
@@ -108,6 +138,7 @@
 </template>
 
 <script>
+import axios from "axios";
 export default {
   data() {
     return {
@@ -171,28 +202,51 @@ export default {
         //   ]
         // }
       },
-      newData: { breakfast: [], lunch: [], dinner: [] },
-      selectedDate: ""
+      tableName: "meals",
+      userCity: "",
+      userName: '',
+      userHotel: '',
+      selectedDate: "",
+      // finalEntry : "",
+      newData: {
+        breakfast: [],
+        lunch: [],
+        dinner: []
+      },
+      
     };
   },
   methods: {
+    // createPri() {
+    //   this.user
+    // },
     addNewData() {
       this.data["" + this.selectedDate] = this.newData;
-      this.newData = { breakfast: [], lunch: [], dinner: [] };
+      // this.newData = { breakfast: [], lunch: [], dinner: [],  };
     },
     saveAllData() {
-      localStorage.setItem('data-123', JSON.stringify(this.data));
+      localStorage.setItem("data-123", JSON.stringify(this.data));
+    },
+    addNewTableElementBreakfast() {
+      console.log(this.newData);
+      const finalEntry = this.userCity + this.userName + this.userHotel + this.selectedDate,
+      this.newData['PriKey'] = finalEntry,
+      axios.post(
+        `http://localhost:3000/meals/insert`,
+        
+        this.newData
+      );
     }
   },
   created() {
-    const x = localStorage.getItem('data-123');
-    if(x) this.data = JSON.parse(x)
+    const x = localStorage.getItem("data-123");
+    if (x) this.data = JSON.parse(x);
   }
 };
 </script>
 
 <style scoped>
-  .input{
-    max-width: 70px
-  }
+.input {
+  max-width: 70px;
+}
 </style>

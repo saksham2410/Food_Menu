@@ -105,7 +105,7 @@ const createTableBasicAPI = (tableName) => {
   app.patch(`/${tableName}/update`, updateTableRow(`${tableName}`));
 }
 
-createTableBasicAPI('users');
+createTableBasicAPI('meals');
 createTableBasicAPI('breakfast');
 createTableBasicAPI('lunch');
 createTableBasicAPI('dinner');
