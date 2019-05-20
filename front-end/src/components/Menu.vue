@@ -13,20 +13,34 @@
               >
             </th>
             <th>
-              <input
+              <select v-model="newData.userCity">
+                <option value="" selected>Select Your City</option>
+                <option value="Bangalore">Bangalore</option>
+                <option value="Mumbai">Mumbai</option>
+                <option value="Delhi">Delhi</option>
+                <option value="Jaipur">Jaipur</option>
+              </select>
+              <!-- <input
                 type="text"
                 value="usercity"
                 placeholder="User City"
                 v-model="newData.userCity"
-              >
+              >-->
             </th>
             <th>
-              <input
+              <select v-model="newData.userHotel">
+                <option value="" selected>Select Your Hotel</option>
+                <option value="Bangalore">Zolo1</option>
+                <option value="Mumbai">Zolo2</option>
+                <option value="Delhi">Zolo3</option>
+                <option value="Jaipur">Zolo4</option>
+              </select>
+              <!-- <input
                 type="text"
                 value="userhotel"
                 placeholder="User Hotel"
                 v-model="newData.userHotel"
-              >
+              > -->
             </th>
           </tr>
         </table>
@@ -78,7 +92,7 @@
             </td>
           </tr>
         </table>
-        <v-btn @click="addNewTableElementBreakfast()">Add Data</v-btn>
+        <v-btn @click="addNewTableElementBreakfast();saveAllData();">Add Data</v-btn>
         <br>
         <br>
         <br>
@@ -143,17 +157,18 @@ import axios from "axios";
 export default {
   data() {
     return {
+      data: {},
       data1: {
-        
-        date:{breakfast: ['bs','s'],
-        lunch: [],
-        dinner: [],
-        userCity: '',
-        userName: '',
-        userHotel: '',
-        date: ''}
-        
-        },
+        date: {
+          breakfast: ["", ""],
+          lunch: [],
+          dinner: [],
+          userCity: "",
+          userName: "",
+          userHotel: "",
+          date: ""
+        }
+      },
       // tableName: "meals",
       // userCity: "",
       // userName: '',
@@ -164,12 +179,11 @@ export default {
         breakfast: [],
         lunch: [],
         dinner: [],
-        userCity: '',
-        userName: '',
-        userHotel: '',
-        selectedDate: ''
-      },
-      
+        userCity: "",
+        userName: "",
+        userHotel: "",
+        selectedDate: ""
+      }
     };
   },
   methods: {
@@ -181,15 +195,17 @@ export default {
       // this.newData = { breakfast: [], lunch: [], dinner: [],  };
     },
     saveAllData() {
-      localStorage.setItem("data-123", JSON.stringify(this.data));
+      // localStorage.setItem("data-123", JSON.stringify(this.data));
+      localStorage.removeItem('data-123');
     },
     async addNewTableElementBreakfast() {
       console.log(this.newData);
+      // this.newData.selectedDate = this.newData.selectedDate.parse(str);
       // const finalEntry = this.userCity + this.userName + this.userHotel + this.selectedDate,
       // this.newData['username'] = this.user,
       await axios.post(
         `http://localhost:3000/meals/insert`,
-        
+
         this.newData
       );
 
@@ -199,35 +215,30 @@ export default {
       // const tableSchema = await axios.get(
       //   `http://localhost:3000/breakfast/schema`
       // );
-      const tableData = await axios.get(
-        `http://localhost:3000/meals`
-      );
+      const tableData = await axios.get(`http://localhost:3000/meals`);
       // this.tableSchema = tableSchema.data;
       this.data1 = tableData.data;
 
       await this.printTable();
-      
     },
     async printTable() {
       let index = 0;
-      for(index =0;index<this.data1.length;index++){
-       
-        this.data1[index].breakfast = this.data1[index].breakfast.split(',') 
-        this.data1[index].lunch = this.data1[index].lunch.split(',') 
-        this.data1[index].dinner = this.data1[index].dinner.split(',') 
+      for (index = 0; index < this.data1.length; index++) {
+        this.data1[index].breakfast = this.data1[index].breakfast.split(",");
+        this.data1[index].lunch = this.data1[index].lunch.split(",");
+        this.data1[index].dinner = this.data1[index].dinner.split(",");
       }
       // for(index )
       // console.log('breakfast', this.data1[index].breakfast, typeof(this.data1[0]));
       // this.data1.breakfast=tableData.data.breakfast.split(',');
 
-
       console.log(this.data1);
-
     }
   },
   created() {
-    const x = localStorage.getItem("data-123");
-    if (x) this.data = JSON.parse(x);
+    // const x = localStorage.getItem("data-123");
+    // if (x) this.data = JSON.parse(x);
+    localStorage.removeItem('data-123');
   }
 };
 </script>
