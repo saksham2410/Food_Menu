@@ -2,10 +2,10 @@
   <v-container>
     <v-layout wrap row>
       <v-flex>
-        <table >
-          Current Date is : 
-            {{formattedDate}}
-            <br>
+        <table>
+          Current Date is :
+          {{formattedDate}}
+          <br>
           <tr>
             <th>
               <input
@@ -15,7 +15,7 @@
                 v-model="newData.userName"
               >
             </th>
-            
+
             <th>
               <select v-model="newData.userCity">
                 <option value selected>Select Your City</option>
@@ -48,12 +48,12 @@
             </th>
           </tr>
         </table>
+        <br>Add for a day :
+        <v-btn @click="addDay">Add Day</v-btn>Add for this week :
+        <v-btn @click="addWeek">Add Week</v-btn>
         <br>
-        Add for a day : <v-btn @click="addDay">Add Day</v-btn>
-        Add for this week : <v-btn @click="addWeek">Add Week</v-btn>
         <br>
-        <br>
-        <table v-for="index in tableNum" :key="index">
+        <table v-for="iter in tableNum" :key="iter">
           <br>
           <tr>
             <th>
@@ -101,7 +101,8 @@
           </tr>
         </table>
         <br>
-        <v-btn @click="addNewTableElementBreakfast()">Add Data</v-btn>
+        <v-btn @click="addNewTableElementBreakfast">Add Data</v-btn>Show All Data:
+        <v-btn @click="getAllData">Show Data</v-btn>
         <br>
         <br>
         <br>
@@ -168,11 +169,10 @@ var moment = require("moment");
 moment().format();
 export default {
   data() {
-    
     return {
-      moment : moment,
+      moment: moment,
       data: {},
-      tableNum : 1,
+      tableNum: 1,
       data1: {
         date: {
           breakfast: ["", ""],
@@ -281,7 +281,7 @@ export default {
         );
       }
 
-      await this.getAllData();
+      // await this.getAllData();
     },
     async getAllData() {
       // const tableSchema = await axios.get(
@@ -295,12 +295,29 @@ export default {
     },
     async printTable() {
       let index = 0;
-      console.log(this.data1);
+      let index1 = 0;
+      // console.log(this.data1);
       for (index = 0; index < this.data1.length; index++) {
-        // for (index1=0; index1<this.data1.length; index1++)
-        // {
-        //   if(this.data1[index].date==this.data1[index1].date){}
-        // }
+        // this.data1.slice().sort();console.log(this.data1);
+        for (index1 = index+1; index1 <this.data1.length; index1++) {
+          
+          // console.log(index);
+          // console.log(index1);
+          
+          // console.log(this.data1[index].date);
+          // console.log(this.data1[index1].date);
+          if (this.data1[index].date === this.data1[index1].date) {
+            // console.log(this.data1[index1].breakfast);
+            // console.log(this.data1[index].breakfast);
+            // let meow = this.data1[index+1].breakfast.toString() + "," ;
+            this.data1[index].breakfast = this.data1[index].breakfast.toString() + "," + this.data1[index1].breakfast.toString();
+            this.data1[index].lunch = this.data1[index].lunch.toString() + "," + this.data1[index1].lunch.toString();
+            this.data1[index].dinner = this.data1[index].dinner.toString() + "," + this.data1[index1].dinner.toString();
+            // let meow3 = meow + meow2;
+            // console.log("hi",this.data1[index].breakfast );
+          }
+        }
+        // index1 = 0;
 
         this.data1[index].breakfast = this.data1[index].breakfast.split(",");
         this.data1[index].lunch = this.data1[index].lunch.split(",");
@@ -320,11 +337,11 @@ export default {
     if (x) this.data = JSON.parse(x);
     // localStorage.removeItem('data-123');
   },
-   computed: {
-      formattedDate() {
-        return moment().format("DD/MM/YYYY");
-      }
+  computed: {
+    formattedDate() {
+      return moment().format("DD/MM/YYYY");
     }
+  }
 };
 </script>
 
