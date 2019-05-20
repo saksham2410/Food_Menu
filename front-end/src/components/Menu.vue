@@ -2,7 +2,10 @@
   <v-container>
     <v-layout wrap row>
       <v-flex>
-        <table>
+        <table >
+          Current Date is : 
+            {{formattedDate}}
+            <br>
           <tr>
             <th>
               <input
@@ -12,6 +15,7 @@
                 v-model="newData.userName"
               >
             </th>
+            
             <th>
               <select v-model="newData.userCity">
                 <option value selected>Select Your City</option>
@@ -29,11 +33,11 @@
             </th>
             <th>
               <select v-model="newData.userHotel">
-                <option value selected>Select Your Hotel</option>
-                <option value="Bangalore">Zolo1</option>
-                <option value="Mumbai">Zolo2</option>
-                <option value="Delhi">Zolo3</option>
-                <option value="Jaipur">Zolo4</option>
+                <option value selected>Select Your Kitchen</option>
+                <option value="Zolo1">Zolo1</option>
+                <option value="Zolo2">Zolo2</option>
+                <option value="Zolo3">Zolo3</option>
+                <option value="Zolo4">Zolo4</option>
               </select>
               <!-- <input
                 type="text"
@@ -45,8 +49,12 @@
           </tr>
         </table>
         <br>
+        Add for a day : <v-btn @click="addDay">Add Day</v-btn>
+        Add for this week : <v-btn @click="addWeek">Add Week</v-btn>
         <br>
-        <table>
+        <br>
+        <table v-for="index in tableNum" :key="index">
+          <br>
           <tr>
             <th>
               <input type="date" v-model="newData.selectedDate">
@@ -92,6 +100,7 @@
             </td>
           </tr>
         </table>
+        <br>
         <v-btn @click="addNewTableElementBreakfast()">Add Data</v-btn>
         <br>
         <br>
@@ -159,8 +168,11 @@ var moment = require("moment");
 moment().format();
 export default {
   data() {
+    
     return {
+      moment : moment,
       data: {},
+      tableNum : 1,
       data1: {
         date: {
           breakfast: ["", ""],
@@ -172,12 +184,6 @@ export default {
           date: ""
         }
       },
-      // tableName: "meals",
-      // userCity: "",
-      // userName: '',
-      // userHotel: '',
-      // selectedDate: "",
-      // finalEntry : "",
       newData: {
         breakfast: [],
         lunch: [],
@@ -199,9 +205,12 @@ export default {
     };
   },
   methods: {
-    // createPri() {
-    //   this.user
-    // },
+    addDay() {
+      this.tableNum = 1;
+    },
+    addWeek() {
+      this.tableNum = 7;
+    },
     addNewData() {
       this.data["" + this.newData.selectedDate] = this.newData;
       // this.newData = { breakfast: [], lunch: [], dinner: [],  };
@@ -236,21 +245,14 @@ export default {
         max = this.newData.dinner.length;
       }
       console.log(max);
-
-      // if (this.newData.breakfast.length)
-      // this.newData1 = this.newData;
-      // this.newData.selectedDate = this.newData.selectedDate.parse(str);
-      // const finalEntry = this.userCity + this.userName + this.userHotel + this.selectedDate,
-      // this.newData['username'] = this.user,
-      // const newData1 = "hello",
       let index = 0;
       for (index = 0; index < max; index++) {
         // console.log(this.newData1);
         console.log(this.newData.breakfast[index]);
         this.newData1 = {
-          breakfast: "",
-          lunch: "",
-          dinner: "",
+          breakfast: "None",
+          lunch: "None",
+          dinner: "None",
           userCity: "",
           userName: "",
           userHotel: "",
@@ -293,7 +295,6 @@ export default {
     },
     async printTable() {
       let index = 0;
-      let index1 = 0;
       console.log(this.data1);
       for (index = 0; index < this.data1.length; index++) {
         // for (index1=0; index1<this.data1.length; index1++)
@@ -318,7 +319,12 @@ export default {
     const x = localStorage.getItem("data-123");
     if (x) this.data = JSON.parse(x);
     // localStorage.removeItem('data-123');
-  }
+  },
+   computed: {
+      formattedDate() {
+        return moment().format("DD/MM/YYYY");
+      }
+    }
 };
 </script>
 
