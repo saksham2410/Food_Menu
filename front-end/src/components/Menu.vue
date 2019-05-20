@@ -14,7 +14,7 @@
             </th>
             <th>
               <select v-model="newData.userCity">
-                <option value="" selected>Select Your City</option>
+                <option value selected>Select Your City</option>
                 <option value="Bangalore">Bangalore</option>
                 <option value="Mumbai">Mumbai</option>
                 <option value="Delhi">Delhi</option>
@@ -29,7 +29,7 @@
             </th>
             <th>
               <select v-model="newData.userHotel">
-                <option value="" selected>Select Your Hotel</option>
+                <option value selected>Select Your Hotel</option>
                 <option value="Bangalore">Zolo1</option>
                 <option value="Mumbai">Zolo2</option>
                 <option value="Delhi">Zolo3</option>
@@ -40,7 +40,7 @@
                 value="userhotel"
                 placeholder="User Hotel"
                 v-model="newData.userHotel"
-              > -->
+              >-->
             </th>
           </tr>
         </table>
@@ -92,7 +92,7 @@
             </td>
           </tr>
         </table>
-        <v-btn @click="addNewTableElementBreakfast();saveAllData();">Add Data</v-btn>
+        <v-btn @click="addNewTableElementBreakfast()">Add Data</v-btn>
         <br>
         <br>
         <br>
@@ -154,6 +154,9 @@
 
 <script>
 import axios from "axios";
+var moment = require("moment");
+
+moment().format();
 export default {
   data() {
     return {
@@ -183,6 +186,15 @@ export default {
         userName: "",
         userHotel: "",
         selectedDate: ""
+      },
+      newData1: {
+        breakfast: "",
+        lunch: "",
+        dinner: "",
+        userCity: "",
+        userName: "",
+        userHotel: "",
+        selectedDate: ""
       }
     };
   },
@@ -196,18 +208,76 @@ export default {
     },
     saveAllData() {
       // localStorage.setItem("data-123", JSON.stringify(this.data));
-      localStorage.removeItem('data-123');
+      localStorage.removeItem("data-123");
     },
     async addNewTableElementBreakfast() {
-      console.log(this.newData);
+      // console.log(this.newData.breakfast.length);
+      var max = this.newData.lunch.length;
+      console.log(this.newData.breakfast.length);
+      console.log(this.newData.lunch.length);
+      console.log(this.newData.dinner.length);
+
+      if (
+        this.newData.breakfast.length >= this.newData.lunch.length &&
+        this.newData.breakfast.length > this.newData.dinner.length
+      ) {
+        max = this.newData.breakfast.length;
+      }
+      if (
+        this.newData.breakfast.length >= this.newData.lunch.length &&
+        this.newData.breakfast.length <= this.newData.dinner.length
+      ) {
+        max = this.newData.dinner.length;
+      }
+      if (
+        this.newData.breakfast.length <= this.newData.lunch.length &&
+        this.newData.dinner.length >= this.newData.lunch.length
+      ) {
+        max = this.newData.dinner.length;
+      }
+      console.log(max);
+
+      // if (this.newData.breakfast.length)
+      // this.newData1 = this.newData;
       // this.newData.selectedDate = this.newData.selectedDate.parse(str);
       // const finalEntry = this.userCity + this.userName + this.userHotel + this.selectedDate,
       // this.newData['username'] = this.user,
-      await axios.post(
-        `http://localhost:3000/meals/insert`,
+      // const newData1 = "hello",
+      let index = 0;
+      for (index = 0; index < max; index++) {
+        // console.log(this.newData1);
+        console.log(this.newData.breakfast[index]);
+        this.newData1 = {
+          breakfast: "",
+          lunch: "",
+          dinner: "",
+          userCity: "",
+          userName: "",
+          userHotel: "",
+          selectedDate: ""
+        };
+        if (index + 1 <= this.newData.breakfast.length) {
+          this.newData1.breakfast = this.newData.breakfast[index];
+        }
+        if (index + 1 <= this.newData.lunch.length) {
+          this.newData1.lunch = this.newData.lunch[index];
+        }
+        if (index + 1 <= this.newData.dinner.length) {
+          this.newData1.dinner = this.newData.dinner[index];
+        }
+        // this.newData1.lunch = this.newData.lunch[index];
+        // this.newData1.dinner = this.newData.dinner[index];
+        this.newData1.userCity = this.newData.userCity;
+        this.newData1.userHotel = this.newData.userHotel;
+        this.newData1.userName = this.newData.userName;
+        this.newData1.selectedDate = this.newData.selectedDate;
+        console.log(this.newData1);
+        await axios.post(
+          `http://localhost:3000/meals/insert`,
 
-        this.newData
-      );
+          this.newData1
+        );
+      }
 
       await this.getAllData();
     },
@@ -223,7 +293,14 @@ export default {
     },
     async printTable() {
       let index = 0;
+      let index1 = 0;
+      console.log(this.data1);
       for (index = 0; index < this.data1.length; index++) {
+        // for (index1=0; index1<this.data1.length; index1++)
+        // {
+        //   if(this.data1[index].date==this.data1[index1].date){}
+        // }
+
         this.data1[index].breakfast = this.data1[index].breakfast.split(",");
         this.data1[index].lunch = this.data1[index].lunch.split(",");
         this.data1[index].dinner = this.data1[index].dinner.split(",");
@@ -236,9 +313,11 @@ export default {
     }
   },
   created() {
-    // const x = localStorage.getItem("data-123");
-    // if (x) this.data = JSON.parse(x);
-    localStorage.removeItem('data-123');
+    var currentTime = moment().format("DD MM YYYY");
+    console.log("Current Date is ", currentTime);
+    const x = localStorage.getItem("data-123");
+    if (x) this.data = JSON.parse(x);
+    // localStorage.removeItem('data-123');
   }
 };
 </script>
