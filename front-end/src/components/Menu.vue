@@ -2,6 +2,8 @@
   <v-container>
     <v-layout wrap row>
       <v-flex>
+        <!-- header Constant Table -->
+
         <table>
           Current Date is :
           {{formattedDate}}
@@ -50,10 +52,13 @@
         </table>
         <br>Add for a day :
         <v-btn @click="addDay">Add Day</v-btn>Add for this week :
-        <v-btn @click="addWeek">Add Week</v-btn>
+        <v-btn v-on:click="visible = !visible">Add Week</v-btn>
         <br>
         <br>
-        <table v-for="iter in tableNum" :key="iter">
+
+        <!-- Table in which we enter the data -->
+
+        <table v-show="visible">
           <br>
           <tr>
             <th>
@@ -96,10 +101,393 @@
               </span>
             </td>
             <td v-for="index in 10" :key="index">
-              <input class="input" id ="newData.meal_type.dinner.type" v-model="newData.meal_type.dinner.items[index-1]">
+              <input
+                class="input"
+                id="newData.meal_type.dinner.type"
+                v-model="newData.meal_type.dinner.items[index-1]"
+              >
             </td>
           </tr>
         </table>
+
+        <!-- Show Data For a week -->
+
+        <v-flex v-show="!visible">
+          <table>
+            <br>
+            <tr>
+              <th>
+                <input type="date" v-model="newData0.selectedDate">
+              </th>
+              <th>Item 1</th>
+              <th>Item 2</th>
+              <th>Item 3</th>
+              <th>Item 4</th>
+              <th>Item 5</th>
+              <th>Item 6</th>
+              <th>Item 7</th>
+              <th>Item 8</th>
+              <th>Item 9</th>
+              <th>Item 10</th>
+            </tr>
+
+            <tr>
+              <th>
+                <input type="text" v-model="meal_type[0]" readonly>
+              </th>
+              <td v-for="index in 10" :key="index">
+                <input class="input" v-model="newData0.meal_type.breakfast.items[index-1]">
+              </td>
+            </tr>
+
+            <tr>
+              <th>
+                <input type="text" v-model="meal_type[1]" readonly>
+              </th>
+              <td v-for="index in 10" :key="index">
+                <input class="input" v-model="newData0.meal_type.lunch.items[index-1]">
+              </td>
+            </tr>
+
+            <tr>
+              <td>
+                <span>
+                  <input type="text" v-model="meal_type[2]" readonly>
+                </span>
+              </td>
+              <td v-for="index in 10" :key="index">
+                <input
+                  class="input"
+                  id="newData.meal_type.dinner.type"
+                  v-model="newData0.meal_type.dinner.items[index-1]"
+                >
+              </td>
+            </tr>
+          </table>
+          <br>
+          <br>
+          <table>
+            <br>
+            <tr>
+              <th>
+                <input type="date" v-model="newData2.selectedDate">
+              </th>
+              <th>Item 1</th>
+              <th>Item 2</th>
+              <th>Item 3</th>
+              <th>Item 4</th>
+              <th>Item 5</th>
+              <th>Item 6</th>
+              <th>Item 7</th>
+              <th>Item 8</th>
+              <th>Item 9</th>
+              <th>Item 10</th>
+            </tr>
+
+            <tr>
+              <th>
+                <input type="text" v-model="meal_type[0]" readonly>
+              </th>
+              <td v-for="index in 10" :key="index">
+                <input class="input" v-model="newData2.meal_type.breakfast.items[index-1]">
+              </td>
+            </tr>
+
+            <tr>
+              <th>
+                <input type="text" v-model="meal_type[1]" readonly>
+              </th>
+              <td v-for="index in 10" :key="index">
+                <input class="input" v-model="newData2.meal_type.lunch.items[index-1]">
+              </td>
+            </tr>
+
+            <tr>
+              <td>
+                <span>
+                  <input type="text" v-model="meal_type[2]" readonly>
+                </span>
+              </td>
+              <td v-for="index in 10" :key="index">
+                <input
+                  class="input"
+                  id="newData.meal_type.dinner.type"
+                  v-model="newData2.meal_type.dinner.items[index-1]"
+                >
+              </td>
+            </tr>
+          </table>
+          <br>
+          <br>
+          <table>
+            <br>
+            <tr>
+              <th>
+                <input type="date" v-model="newData3.selectedDate">
+              </th>
+              <th>Item 1</th>
+              <th>Item 2</th>
+              <th>Item 3</th>
+              <th>Item 4</th>
+              <th>Item 5</th>
+              <th>Item 6</th>
+              <th>Item 7</th>
+              <th>Item 8</th>
+              <th>Item 9</th>
+              <th>Item 10</th>
+            </tr>
+
+            <tr>
+              <th>
+                <input type="text" v-model="meal_type[0]" readonly>
+              </th>
+              <td v-for="index in 10" :key="index">
+                <input class="input" v-model="newData3.meal_type.breakfast.items[index-1]">
+              </td>
+            </tr>
+
+            <tr>
+              <th>
+                <input type="text" v-model="meal_type[1]" readonly>
+              </th>
+              <td v-for="index in 10" :key="index">
+                <input class="input" v-model="newData3.meal_type.lunch.items[index-1]">
+              </td>
+            </tr>
+
+            <tr>
+              <td>
+                <span>
+                  <input type="text" v-model="meal_type[2]" readonly>
+                </span>
+              </td>
+              <td v-for="index in 10" :key="index">
+                <input
+                  class="input"
+                  id="newData.meal_type.dinner.type"
+                  v-model="newData3.meal_type.dinner.items[index-1]"
+                >
+              </td>
+            </tr>
+          </table>
+          <br>
+          <br>
+          <table>
+            <br>
+            <tr>
+              <th>
+                <input type="date" v-model="newData4.selectedDate">
+              </th>
+              <th>Item 1</th>
+              <th>Item 2</th>
+              <th>Item 3</th>
+              <th>Item 4</th>
+              <th>Item 5</th>
+              <th>Item 6</th>
+              <th>Item 7</th>
+              <th>Item 8</th>
+              <th>Item 9</th>
+              <th>Item 10</th>
+            </tr>
+
+            <tr>
+              <th>
+                <input type="text" v-model="meal_type[0]" readonly>
+              </th>
+              <td v-for="index in 10" :key="index">
+                <input class="input" v-model="newData4.meal_type.breakfast.items[index-1]">
+              </td>
+            </tr>
+
+            <tr>
+              <th>
+                <input type="text" v-model="meal_type[1]" readonly>
+              </th>
+              <td v-for="index in 10" :key="index">
+                <input class="input" v-model="newData4.meal_type.lunch.items[index-1]">
+              </td>
+            </tr>
+
+            <tr>
+              <td>
+                <span>
+                  <input type="text" v-model="meal_type[2]" readonly>
+                </span>
+              </td>
+              <td v-for="index in 10" :key="index">
+                <input
+                  class="input"
+                  id="newData.meal_type.dinner.type"
+                  v-model="newData4.meal_type.dinner.items[index-1]"
+                >
+              </td>
+            </tr>
+          </table>
+          <br>
+          <br>
+          <table>
+            <br>
+            <tr>
+              <th>
+                <input type="date" v-model="newData5.selectedDate">
+              </th>
+              <th>Item 1</th>
+              <th>Item 2</th>
+              <th>Item 3</th>
+              <th>Item 4</th>
+              <th>Item 5</th>
+              <th>Item 6</th>
+              <th>Item 7</th>
+              <th>Item 8</th>
+              <th>Item 9</th>
+              <th>Item 10</th>
+            </tr>
+
+            <tr>
+              <th>
+                <input type="text" v-model="meal_type[0]" readonly>
+              </th>
+              <td v-for="index in 10" :key="index">
+                <input class="input" v-model="newData5.meal_type.breakfast.items[index-1]">
+              </td>
+            </tr>
+
+            <tr>
+              <th>
+                <input type="text" v-model="meal_type[1]" readonly>
+              </th>
+              <td v-for="index in 10" :key="index">
+                <input class="input" v-model="newData5.meal_type.lunch.items[index-1]">
+              </td>
+            </tr>
+
+            <tr>
+              <td>
+                <span>
+                  <input type="text" v-model="meal_type[2]" readonly>
+                </span>
+              </td>
+              <td v-for="index in 10" :key="index">
+                <input
+                  class="input"
+                  id="newData.meal_type.dinner.type"
+                  v-model="newData5.meal_type.dinner.items[index-1]"
+                >
+              </td>
+            </tr>
+          </table>
+          <br>
+          <br>
+          <table>
+            <br>
+            <tr>
+              <th>
+                <input type="date" v-model="newData6.selectedDate">
+              </th>
+              <th>Item 1</th>
+              <th>Item 2</th>
+              <th>Item 3</th>
+              <th>Item 4</th>
+              <th>Item 5</th>
+              <th>Item 6</th>
+              <th>Item 7</th>
+              <th>Item 8</th>
+              <th>Item 9</th>
+              <th>Item 10</th>
+            </tr>
+
+            <tr>
+              <th>
+                <input type="text" v-model="meal_type[0]" readonly>
+              </th>
+              <td v-for="index in 10" :key="index">
+                <input class="input" v-model="newData6.meal_type.breakfast.items[index-1]">
+              </td>
+            </tr>
+
+            <tr>
+              <th>
+                <input type="text" v-model="meal_type[1]" readonly>
+              </th>
+              <td v-for="index in 10" :key="index">
+                <input class="input" v-model="newData6.meal_type.lunch.items[index-1]">
+              </td>
+            </tr>
+
+            <tr>
+              <td>
+                <span>
+                  <input type="text" v-model="meal_type[2]" readonly>
+                </span>
+              </td>
+              <td v-for="index in 10" :key="index">
+                <input
+                  class="input"
+                  id="newData.meal_type.dinner.type"
+                  v-model="newData6.meal_type.dinner.items[index-1]"
+                >
+              </td>
+            </tr>
+          </table>
+          <br>
+          <br>
+          <table>
+            <br>
+            <tr>
+              <th>
+                <input type="date" v-model="newData7.selectedDate">
+              </th>
+              <th>Item 1</th>
+              <th>Item 2</th>
+              <th>Item 3</th>
+              <th>Item 4</th>
+              <th>Item 5</th>
+              <th>Item 6</th>
+              <th>Item 7</th>
+              <th>Item 8</th>
+              <th>Item 9</th>
+              <th>Item 10</th>
+            </tr>
+
+            <tr>
+              <th>
+                <input type="text" v-model="meal_type[0]" readonly>
+              </th>
+              <td v-for="index in 10" :key="index">
+                <input class="input" v-model="newData7.meal_type.breakfast.items[index-1]">
+              </td>
+            </tr>
+
+            <tr>
+              <th>
+                <input type="text" v-model="meal_type[1]" readonly>
+              </th>
+              <td v-for="index in 10" :key="index">
+                <input class="input" v-model="newData7.meal_type.lunch.items[index-1]">
+              </td>
+            </tr>
+
+            <tr>
+              <td>
+                <span>
+                  <input type="text" v-model="meal_type[2]" readonly>
+                </span>
+              </td>
+              <td v-for="index in 10" :key="index">
+                <input
+                  class="input"
+                  id="newData.meal_type.dinner.type"
+                  v-model="newData7.meal_type.dinner.items[index-1]"
+                >
+              </td>
+            </tr>
+          </table>
+          <br>
+          <br>
+        </v-flex>
+
+        <!-- Footer Buttons -->
+
         <br>
         <v-btn @click="addNewTableElementBreakfast">Add Data</v-btn>Show All Data:
         <v-btn @click="getAllData">Show Data</v-btn>
@@ -108,8 +496,10 @@
         <br>
       </v-flex>
 
+      <!-- Display Data Table -->
+
       <!-- <v-flex sm12>
-        <table v-for="(menu, date, i) in data1" :key="i">
+        <table v-for="(menu, i) in data1" :key="i">
           menu:{{menu}}
           <tr>
             <th>
@@ -126,7 +516,6 @@
             <th>Item 9</th>
             <th>Item 10</th>
           </tr>
-
           <tr>
             <td>
               <input type="text" value="Breakfast" readonly>
@@ -135,7 +524,6 @@
               <input class="input" v-model="menu.breakfast[index-1]">
             </td>
           </tr>
-
           <tr>
             <td>
               <input type="text" value="Lunch" readonly>
@@ -144,7 +532,6 @@
               <input class="input" v-model="menu.lunch[index-1]">
             </td>
           </tr>
-
           <tr>
             <td>
               <input type="text" value="Dinner" readonly>
@@ -157,7 +544,7 @@
           <br>
         </table>
         <v-btn @click="saveAllData">Save All</v-btn>
-      </v-flex> -->
+      </v-flex>-->
     </v-layout>
   </v-container>
 </template>
@@ -165,36 +552,114 @@
 <script>
 import axios from "axios";
 var moment = require("moment");
-
 moment().format();
 export default {
   data() {
     return {
+      visible: true,
       moment: moment,
       data: {},
-      tableNum: 1,
-      meal_type : ['breakfast','lunch','dinner'],
+      items: {  breakfast: [], lunch: [], dinner: []  },
+      meal_type: ["breakfast", "lunch", "dinner"],
       data1: {
-        date: {
-          breakfast: ["", ""],
-          lunch: [],
-          dinner: [],
-          userCity: "",
-          userName: "",
-          userHotel: "",
-          date: ""
-        }
+        meal_type: "",
+        item_name: "",
+        userCity: "",
+        userName: "",
+        userHotel: "",
+        selectedDate: ""
+      },
+      newData0: {
+        meal_type: {
+          breakfast: { type: "breakfast", items: [] },
+          lunch: { type: "lunch", items: [] },
+          dinner: { type: "dinner", items: [] }
+        },
+        userCity: "",
+        userName: "",
+        userHotel: "",
+        selectedDate: ""
+      },
+      newData2: {
+        meal_type: {
+          breakfast: { type: "breakfast", items: [] },
+          lunch: { type: "lunch", items: [] },
+          dinner: { type: "dinner", items: [] }
+        },
+        userCity: "",
+        userName: "",
+        userHotel: "",
+        selectedDate: ""
+      },
+      newData3: {
+        meal_type: {
+          breakfast: { type: "breakfast", items: [] },
+          lunch: { type: "lunch", items: [] },
+          dinner: { type: "dinner", items: [] }
+        },
+        userCity: "",
+        userName: "",
+        userHotel: "",
+        selectedDate: ""
+      },
+      newData4: {
+        meal_type: {
+          breakfast: { type: "breakfast", items: [] },
+          lunch: { type: "lunch", items: [] },
+          dinner: { type: "dinner", items: [] }
+        },
+        userCity: "",
+        userName: "",
+        userHotel: "",
+        selectedDate: ""
+      },
+      newData5: {
+        meal_type: {
+          breakfast: { type: "breakfast", items: [] },
+          lunch: { type: "lunch", items: [] },
+          dinner: { type: "dinner", items: [] }
+        },
+        userCity: "",
+        userName: "",
+        userHotel: "",
+        selectedDate: ""
+      },
+      newData6: {
+        meal_type: {
+          breakfast: { type: "breakfast", items: [] },
+          lunch: { type: "lunch", items: [] },
+          dinner: { type: "dinner", items: [] }
+        },
+        userCity: "",
+        userName: "",
+        userHotel: "",
+        selectedDate: ""
+      },
+      newData7: {
+        meal_type: {
+          breakfast: { type: "breakfast", items: [] },
+          lunch: { type: "lunch", items: [] },
+          dinner: { type: "dinner", items: [] }
+        },
+        userCity: "",
+        userName: "",
+        userHotel: "",
+        selectedDate: ""
       },
       newData: {
-        meal_type: { breakfast: {type: "breakfast", items: []},lunch:{type: "lunch", items: []},dinner:{type: "dinner", items: []} },
+        meal_type: {
+          breakfast: { type: "breakfast", items: [] },
+          lunch: { type: "lunch", items: [] },
+          dinner: { type: "dinner", items: [] }
+        },
         userCity: "",
         userName: "",
         userHotel: "",
         selectedDate: ""
       },
       newData1: {
-        meal_type:'',
-        item_name: '',
+        meal_type: "",
+        item_name: "",
         userCity: "",
         userName: "",
         userHotel: "",
@@ -217,64 +682,72 @@ export default {
       // localStorage.setItem("data-123", JSON.stringify(this.data));
       localStorage.removeItem("data-123");
     },
+    async modifyData(DataType) {
+      console.log("Datatyle", DataType);
+      let index = 0;
+      for (index; index < DataType.meal_type.breakfast.items.length; index++) {
+        this.newData1.meal_type = DataType.meal_type.breakfast.type;
+        this.newData1.item_name = DataType.meal_type.breakfast.items[index];
+        this.newData1.userCity = this.newData.userCity;
+        this.newData1.userName = this.newData.userName;
+        this.newData1.userHotel = this.newData.userHotel;
+        this.newData1.selectedDate = DataType.selectedDate;
+        // console.log("hey1", DataType.meal_type);
+        // console.log("hey2", DataType.item_name);
+        await axios.post(`http://localhost:3000/meals2/insert`, this.newData1);
+      }
+      index = 0;
+      for (index; index < DataType.meal_type.lunch.items.length; index++) {
+        this.newData1.meal_type = DataType.meal_type.lunch.type;
+        this.newData1.item_name = DataType.meal_type.lunch.items[index];
+        this.newData1.userCity = this.newData.userCity;
+        this.newData1.userName = this.newData.userName;
+        this.newData1.userHotel = this.newData.userHotel;
+        this.newData1.selectedDate = DataType.selectedDate;
+        // console.log("hey1", DataType.meal_type);
+        // console.log("hey2", DataType.item_name);
+        await axios.post(`http://localhost:3000/meals2/insert`, this.newData1);
+      }
+      index = 0;
+      for (index; index < DataType.meal_type.dinner.items.length; index++) {
+        this.newData1.meal_type = DataType.meal_type.dinner.type;
+        this.newData1.item_name = DataType.meal_type.dinner.items[index];
+        this.newData1.userCity = this.newData.userCity;
+        this.newData1.userName = this.newData.userName;
+        this.newData1.userHotel = this.newData.userHotel;
+        this.newData1.selectedDate = DataType.selectedDate;
+        // console.log("hey1", DataType.meal_type);
+        // console.log("hey2", DataType.item_name);
+        await axios.post(`http://localhost:3000/meals2/insert`, this.newData1);
+      }
+    },
     async addNewTableElementBreakfast() {
       // console.log(this.newData.breakfast.length);
       // var max = this.newData.lunch.length;
       console.log(this.newData.meal_type.breakfast.items.length);
-      let index=0;
-      for (index; index<this.newData.meal_type.breakfast.items.length; index++)
-      {
-        this.newData1.meal_type=this.newData.meal_type.breakfast.type;
-        this.newData1.item_name=this.newData.meal_type.breakfast.items[index];
-        this.newData1.userCity=this.newData.userCity;
-        this.newData1.userName=this.newData.userName;
-        this.newData1.userHotel=this.newData.userHotel;
-        this.newData1.selectedDate=this.newData.selectedDate;
-        console.log('hey1', this.newData1.meal_type);
-        console.log('hey2', this.newData1.item_name);
-        await axios.post(
-          `http://localhost:3000/meals2/insert`,
 
-          this.newData1
-        );
+      if (this.visible) {
+        this.modifyData(this.newData);
       }
-      index =0;
-      for (index; index<this.newData.meal_type.lunch.items.length; index++)
-      {
-        this.newData1.meal_type=this.newData.meal_type.lunch.type;
-        this.newData1.item_name=this.newData.meal_type.lunch.items[index];
-        this.newData1.userCity=this.newData.userCity;
-        this.newData1.userName=this.newData.userName;
-        this.newData1.userHotel=this.newData.userHotel;
-        this.newData1.selectedDate=this.newData.selectedDate;
-        console.log('hey1', this.newData1.meal_type);
-        console.log('hey2', this.newData1.item_name);
-        await axios.post(
-          `http://localhost:3000/meals2/insert`,
+      if (!this.visible) {
+        await this.modifyData(this.newData0);
+        console.log("newData", this.newData1);
+        await this.modifyData(this.newData2);
+        console.log("newData", this.newData1);
+        await this.modifyData(this.newData3);
+        console.log("newData", this.newData1);
+        await this.modifyData(this.newData4);
+        console.log("newData", this.newData1);
+        await this.modifyData(this.newData5);
+        console.log("newData", this.newData1);
+        await this.modifyData(this.newData6);
+        console.log("newData", this.newData1);
+        await this.modifyData(this.newData7);
+        console.log("newData", this.newData1);
+      }
 
-          this.newData1
-        );
-      }
-      index=0;
-      for (index; index<this.newData.meal_type.dinner.items.length; index++)
-      {
-        this.newData1.meal_type=this.newData.meal_type.dinner.type;
-        this.newData1.item_name=this.newData.meal_type.dinner.items[index];
-        this.newData1.userCity=this.newData.userCity;
-        this.newData1.userName=this.newData.userName;
-        this.newData1.userHotel=this.newData.userHotel;
-        this.newData1.selectedDate=this.newData.selectedDate;
-        console.log('hey1', this.newData1.meal_type);
-        console.log('hey2', this.newData1.item_name);
-        await axios.post(
-          `http://localhost:3000/meals2/insert`,
-
-          this.newData1
-        );
-      }
       // console.log(this.newData.lunch.length);
       // console.log(this.newData.dinner.length);
-
       // if (
       //   this.newData.breakfast.length >= this.newData.lunch.length &&
       //   this.newData.breakfast.length > this.newData.dinner.length
@@ -322,26 +795,93 @@ export default {
       //   this.newData1.userHotel = this.newData.userHotel;
       //   this.newData1.userName = this.newData.userName;
       //   this.newData1.selectedDate = this.newData.selectedDate;
-        console.log(this.newData);
-        console.log(this.newData.meal_type.breakfast.type)
-        if(this.newData.meal_type1==="breakfast" )
-        {
-          console.log('hi');
-        }
-        
-      // }
+      console.log("sent Data", this.newData);
 
+      // }
       // await this.getAllData();
     },
     async getAllData() {
+      console.log(this.data1);
       // const tableSchema = await axios.get(
       //   `http://localhost:3000/breakfast/schema`
       // );
-      const tableData = await axios.get(`http://localhost:3000/meals`);
-      // this.tableSchema = tableSchema.data;
-      this.data1 = tableData.data;
+      const tableData = await axios.get(`http://localhost:3000/meals2`);
+      const tableData1 = await axios.get('http://localhost:3000/meals2/somedata');
+      const tableData3 = await axios.get('http://localhost:3000/meals2/getdistinct');
+      // var meow;
+      var meow=tableData1.data;
+      var meow2 = tableData3.data;
+      console.log('New Data', meow);
+      console.log('New Datasssss', meow2);
+      var iter1=0;
+      for(iter1;iter1<meow2.length;iter1++)
+      {
+        var iter2=0;
+        for(iter2;iter2<meow.length;iter2++)
+        {
+          if(meow[iter2].date===meow2[iter1].date){
+            console.log(meow[iter2].date);
+            console.log(meow2[iter1].date);
+          if(meow[iter2].meal_type==="breakfast")
+          {
+            this.items.breakfast.push(meow[iter2].item_name);
+            console.log('pushed',this.items.breakfast);
+          }
+          if(meow[iter2].meal_type==="lunch")
+          {
+            this.items.lunch.push(meow[iter2].item_name);
+          }
+          if(meow[iter2].meal_type==="dinner")
+          {
+            this.items.dinner.push(meow[iter2].item_name);
+          }}
+        }
+      }
+      console.log('itemsss',this.items);
+      
+      // let arr2 = [];
+      // arr2 = await axios.get('http://localhost:3000/meals2/somedatameal');
+      // console.log('Newest', arr2);
 
-      await this.printTable();
+      // this.tableSchema = tableSchema.data;
+
+      // console.log(tableData);
+      // this.data1 = tableData.data;
+      // console.log(this.data1);
+      // console.log(this.data1.length);
+
+
+      // console.log(this.items);
+      // let arr1 = ["hi"];
+      // let index1 = 0;
+      // for (index1; index1 < this.data1.length; index1++) {
+      //   var i;
+      //   var bool=true;
+
+      //   for (i = 0; i < arr1.length; i++) {
+      //     if (arr1[i] === this.data1[index1].date) {
+      //       console.log(i);
+      //       bool=false;
+      //     }
+      //   }
+      //   console.log(bool);
+      //   console.log('upper',arr1);
+      //   if(bool){
+      //   if (this.data1[index1].meal_type == "breakfast") {
+      //     console.log("hi");
+      //     this.items.date.breakfast[index1] += this.data1[index1].item_name;
+      //   }
+      //   if (this.data1[index1].meal_type == "lunch") {
+      //     this.items.date.lunch[index1] += this.data1[index1].item_name;
+      //   }
+      //   if (this.data1[index1].meal_type == "dinner") {
+      //     this.items.date.dinner[index1] += this.data1[index1].item_name;
+      //   }}
+      //   arr1.push(this.data1[index1].date);
+      // }
+      // console.log("Modified Data", this.items);
+      // console.log(arr1)
+      // await this.printTable();
     },
     async printTable() {
       let index = 0;
@@ -350,28 +890,35 @@ export default {
       // console.log(this.data1);
       for (index = 0; index < this.data1.length; index++) {
         // this.data1.slice().sort();console.log(this.data1);
-        for (index1 = index+1; index1 <this.data1.length; index1++) {
-          
+        for (index1 = index + 1; index1 < this.data1.length; index1++) {
           // console.log(index);
           // console.log(index1);
-          
+
           // console.log(this.data1[index].date);
           // console.log(this.data1[index1].date);
           if (this.data1[index].date === this.data1[index1].date) {
             // console.log(this.data1[index1].breakfast);
             // console.log(this.data1[index].breakfast);
             // let meow = this.data1[index+1].breakfast.toString() + "," ;
-            this.data1[index].breakfast = this.data1[index].breakfast.toString() + "," + this.data1[index1].breakfast.toString();
-            this.data1[index].lunch = this.data1[index].lunch.toString() + "," + this.data1[index1].lunch.toString();
-            this.data1[index].dinner = this.data1[index].dinner.toString() + "," + this.data1[index1].dinner.toString();
+            this.data1[index].breakfast =
+              this.data1[index].breakfast.toString() +
+              "," +
+              this.data1[index1].breakfast.toString();
+            this.data1[index].lunch =
+              this.data1[index].lunch.toString() +
+              "," +
+              this.data1[index1].lunch.toString();
+            this.data1[index].dinner =
+              this.data1[index].dinner.toString() +
+              "," +
+              this.data1[index1].dinner.toString();
             arr.push(index);
             // let meow3 = meow + meow2;
             // console.log("hi",this.data1[index].breakfast );
           }
         }
-        console.log('array', arr)
+        console.log("array", arr);
         // index1 = 0;
-
         this.data1[index].breakfast = this.data1[index].breakfast.split(",");
         this.data1[index].lunch = this.data1[index].lunch.split(",");
         this.data1[index].dinner = this.data1[index].dinner.split(",");
@@ -379,7 +926,6 @@ export default {
       // for(index )
       // console.log('breakfast', this.data1[index].breakfast, typeof(this.data1[0]));
       // this.data1.breakfast=tableData.data.breakfast.split(',');
-
       console.log(this.data1);
     }
   },
