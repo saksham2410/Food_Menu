@@ -73,30 +73,30 @@
 
           <tr>
             <th>
-              <input type="text" value="Breakfast" readonly>
+              <input type="text" v-model="meal_type[0]" readonly>
             </th>
             <td v-for="index in 10" :key="index">
-              <input class="input" v-model="newData.breakfast[index-1]">
+              <input class="input" v-model="newData.meal_type.breakfast.items[index-1]">
             </td>
           </tr>
 
           <tr>
             <th>
-              <input type="text" value="Lunch" readonly>
+              <input type="text" v-model="meal_type[1]" readonly>
             </th>
             <td v-for="index in 10" :key="index">
-              <input class="input" v-model="newData.lunch[index-1]">
+              <input class="input" v-model="newData.meal_type.lunch.items[index-1]">
             </td>
           </tr>
 
           <tr>
             <td>
               <span>
-                <input type="text" value="Dinner" readonly>
+                <input type="text" v-model="meal_type[2]" readonly>
               </span>
             </td>
             <td v-for="index in 10" :key="index">
-              <input class="input" v-model="newData.dinner[index-1]">
+              <input class="input" id ="newData.meal_type.dinner.type" v-model="newData.meal_type.dinner.items[index-1]">
             </td>
           </tr>
         </table>
@@ -108,9 +108,9 @@
         <br>
       </v-flex>
 
-      <v-flex sm12>
+      <!-- <v-flex sm12>
         <table v-for="(menu, date, i) in data1" :key="i">
-          <!-- menu:{{menu}} -->
+          menu:{{menu}}
           <tr>
             <th>
               <input type="text" :value="menu.date" readonly>
@@ -157,7 +157,7 @@
           <br>
         </table>
         <v-btn @click="saveAllData">Save All</v-btn>
-      </v-flex>
+      </v-flex> -->
     </v-layout>
   </v-container>
 </template>
@@ -173,6 +173,7 @@ export default {
       moment: moment,
       data: {},
       tableNum: 1,
+      meal_type : ['breakfast','lunch','dinner'],
       data1: {
         date: {
           breakfast: ["", ""],
@@ -185,18 +186,15 @@ export default {
         }
       },
       newData: {
-        breakfast: [],
-        lunch: [],
-        dinner: [],
+        meal_type: { breakfast: {type: "breakfast", items: []},lunch:{type: "lunch", items: []},dinner:{type: "dinner", items: []} },
         userCity: "",
         userName: "",
         userHotel: "",
         selectedDate: ""
       },
       newData1: {
-        breakfast: "",
-        lunch: "",
-        dinner: "",
+        meal_type:'',
+        item_name: '',
         userCity: "",
         userName: "",
         userHotel: "",
@@ -221,65 +219,117 @@ export default {
     },
     async addNewTableElementBreakfast() {
       // console.log(this.newData.breakfast.length);
-      var max = this.newData.lunch.length;
-      console.log(this.newData.breakfast.length);
-      console.log(this.newData.lunch.length);
-      console.log(this.newData.dinner.length);
-
-      if (
-        this.newData.breakfast.length >= this.newData.lunch.length &&
-        this.newData.breakfast.length > this.newData.dinner.length
-      ) {
-        max = this.newData.breakfast.length;
-      }
-      if (
-        this.newData.breakfast.length >= this.newData.lunch.length &&
-        this.newData.breakfast.length <= this.newData.dinner.length
-      ) {
-        max = this.newData.dinner.length;
-      }
-      if (
-        this.newData.breakfast.length <= this.newData.lunch.length &&
-        this.newData.dinner.length >= this.newData.lunch.length
-      ) {
-        max = this.newData.dinner.length;
-      }
-      console.log(max);
-      let index = 0;
-      for (index = 0; index < max; index++) {
-        // console.log(this.newData1);
-        console.log(this.newData.breakfast[index]);
-        this.newData1 = {
-          breakfast: "None",
-          lunch: "None",
-          dinner: "None",
-          userCity: "",
-          userName: "",
-          userHotel: "",
-          selectedDate: ""
-        };
-        if (index + 1 <= this.newData.breakfast.length) {
-          this.newData1.breakfast = this.newData.breakfast[index];
-        }
-        if (index + 1 <= this.newData.lunch.length) {
-          this.newData1.lunch = this.newData.lunch[index];
-        }
-        if (index + 1 <= this.newData.dinner.length) {
-          this.newData1.dinner = this.newData.dinner[index];
-        }
-        // this.newData1.lunch = this.newData.lunch[index];
-        // this.newData1.dinner = this.newData.dinner[index];
-        this.newData1.userCity = this.newData.userCity;
-        this.newData1.userHotel = this.newData.userHotel;
-        this.newData1.userName = this.newData.userName;
-        this.newData1.selectedDate = this.newData.selectedDate;
-        console.log(this.newData1);
+      // var max = this.newData.lunch.length;
+      console.log(this.newData.meal_type.breakfast.items.length);
+      let index=0;
+      for (index; index<this.newData.meal_type.breakfast.items.length; index++)
+      {
+        this.newData1.meal_type=this.newData.meal_type.breakfast.type;
+        this.newData1.item_name=this.newData.meal_type.breakfast.items[index];
+        this.newData1.userCity=this.newData.userCity;
+        this.newData1.userName=this.newData.userName;
+        this.newData1.userHotel=this.newData.userHotel;
+        this.newData1.selectedDate=this.newData.selectedDate;
+        console.log('hey1', this.newData1.meal_type);
+        console.log('hey2', this.newData1.item_name);
         await axios.post(
-          `http://localhost:3000/meals/insert`,
+          `http://localhost:3000/meals2/insert`,
 
           this.newData1
         );
       }
+      index =0;
+      for (index; index<this.newData.meal_type.lunch.items.length; index++)
+      {
+        this.newData1.meal_type=this.newData.meal_type.lunch.type;
+        this.newData1.item_name=this.newData.meal_type.lunch.items[index];
+        this.newData1.userCity=this.newData.userCity;
+        this.newData1.userName=this.newData.userName;
+        this.newData1.userHotel=this.newData.userHotel;
+        this.newData1.selectedDate=this.newData.selectedDate;
+        console.log('hey1', this.newData1.meal_type);
+        console.log('hey2', this.newData1.item_name);
+        await axios.post(
+          `http://localhost:3000/meals2/insert`,
+
+          this.newData1
+        );
+      }
+      index=0;
+      for (index; index<this.newData.meal_type.dinner.items.length; index++)
+      {
+        this.newData1.meal_type=this.newData.meal_type.dinner.type;
+        this.newData1.item_name=this.newData.meal_type.dinner.items[index];
+        this.newData1.userCity=this.newData.userCity;
+        this.newData1.userName=this.newData.userName;
+        this.newData1.userHotel=this.newData.userHotel;
+        this.newData1.selectedDate=this.newData.selectedDate;
+        console.log('hey1', this.newData1.meal_type);
+        console.log('hey2', this.newData1.item_name);
+        await axios.post(
+          `http://localhost:3000/meals2/insert`,
+
+          this.newData1
+        );
+      }
+      // console.log(this.newData.lunch.length);
+      // console.log(this.newData.dinner.length);
+
+      // if (
+      //   this.newData.breakfast.length >= this.newData.lunch.length &&
+      //   this.newData.breakfast.length > this.newData.dinner.length
+      // ) {
+      //   max = this.newData.breakfast.length;
+      // }
+      // if (
+      //   this.newData.breakfast.length >= this.newData.lunch.length &&
+      //   this.newData.breakfast.length <= this.newData.dinner.length
+      // ) {
+      //   max = this.newData.dinner.length;
+      // }
+      // if (
+      //   this.newData.breakfast.length <= this.newData.lunch.length &&
+      //   this.newData.dinner.length >= this.newData.lunch.length
+      // ) {
+      //   max = this.newData.dinner.length;
+      // }
+      // console.log(max);
+      // let index = 0;
+      // for (index = 0; index < max; index++) {
+      //   // console.log(this.newData1);
+      //   console.log(this.newData.breakfast[index]);
+      //   this.newData1 = {
+      //     breakfast: "None",
+      //     lunch: "None",
+      //     dinner: "None",
+      //     userCity: "",
+      //     userName: "",
+      //     userHotel: "",
+      //     selectedDate: ""
+      //   };
+      //   if (index + 1 <= this.newData.breakfast.length) {
+      //     this.newData1.breakfast = this.newData.breakfast[index];
+      //   }
+      //   if (index + 1 <= this.newData.lunch.length) {
+      //     this.newData1.lunch = this.newData.lunch[index];
+      //   }
+      //   if (index + 1 <= this.newData.dinner.length) {
+      //     this.newData1.dinner = this.newData.dinner[index];
+      //   }
+      //   // this.newData1.lunch = this.newData.lunch[index];
+      //   // this.newData1.dinner = this.newData.dinner[index];
+      //   this.newData1.userCity = this.newData.userCity;
+      //   this.newData1.userHotel = this.newData.userHotel;
+      //   this.newData1.userName = this.newData.userName;
+      //   this.newData1.selectedDate = this.newData.selectedDate;
+        console.log(this.newData);
+        console.log(this.newData.meal_type.breakfast.type)
+        if(this.newData.meal_type1==="breakfast" )
+        {
+          console.log('hi');
+        }
+        
+      // }
 
       // await this.getAllData();
     },
@@ -296,6 +346,7 @@ export default {
     async printTable() {
       let index = 0;
       let index1 = 0;
+      let arr = [];
       // console.log(this.data1);
       for (index = 0; index < this.data1.length; index++) {
         // this.data1.slice().sort();console.log(this.data1);
@@ -313,10 +364,12 @@ export default {
             this.data1[index].breakfast = this.data1[index].breakfast.toString() + "," + this.data1[index1].breakfast.toString();
             this.data1[index].lunch = this.data1[index].lunch.toString() + "," + this.data1[index1].lunch.toString();
             this.data1[index].dinner = this.data1[index].dinner.toString() + "," + this.data1[index1].dinner.toString();
+            arr.push(index);
             // let meow3 = meow + meow2;
             // console.log("hi",this.data1[index].breakfast );
           }
         }
+        console.log('array', arr)
         // index1 = 0;
 
         this.data1[index].breakfast = this.data1[index].breakfast.split(",");

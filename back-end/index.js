@@ -106,6 +106,7 @@ const createTableBasicAPI = (tableName) => {
 }
 
 createTableBasicAPI('meals');
+createTableBasicAPI('meals2');
 createTableBasicAPI('breakfast');
 createTableBasicAPI('lunch');
 createTableBasicAPI('dinner');

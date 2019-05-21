@@ -9,6 +9,7 @@ import Vuetify from 'vuetify';
 import UsersTable from './components/UsersTable.vue';
 import ProductsTable from './components/ProductsTable.vue';
 import Menu from './components/Menu.vue';
+import Rpc from './components/Rpc.vue';
 
 
 import 'bootstrap/dist/css/bootstrap.css';
@@ -25,6 +26,7 @@ const routes = [
   {path: '/users', component: UsersTable},
   {path: '/products', component: ProductsTable},
   {path: '/menu', component: Menu},
+  {path: '/rpc', component: Rpc},
 ]
 
 
