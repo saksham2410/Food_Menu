@@ -51,8 +51,8 @@
           </tr>
         </table>
         <br>Add for a day :
-        <v-btn @click="addDay">Add Day</v-btn>Add for this week :
-        <v-btn v-on:click="visible = !visible">Add Week</v-btn>
+        <v-btn v-on:click="visible = true">Add Day</v-btn>Add for this week :
+        <v-btn v-on:click="visible = false">Add Week</v-btn>
         <br>
         <br>
 
@@ -489,62 +489,15 @@
         <!-- Footer Buttons -->
 
         <br>
-        <v-btn @click="getAllData">Add Data</v-btn>Show All Data:
-        <v-btn @click="getAllData">Show Data</v-btn>
+        <v-btn @click="getAllData">Add Data</v-btn>
+        <br>
+        <br>Get Data for :
+        <input type="date" v-model="fetchDate">
+        <v-btn @click="displayData">Show Data</v-btn>
         <br>
         <br>
         <br>
       </v-flex>
-
-      <!-- Display Data Table -->
-
-      <!-- <v-flex sm12>
-        <table v-for="(menu, i) in data1" :key="i">
-          menu:{{menu}}
-          <tr>
-            <th>
-              <input type="text" :value="menu.date" readonly>
-            </th>
-            <th>Item 1</th>
-            <th>Item 2</th>
-            <th>Item 3</th>
-            <th>Item 4</th>
-            <th>Item 5</th>
-            <th>Item 6</th>
-            <th>Item 7</th>
-            <th>Item 8</th>
-            <th>Item 9</th>
-            <th>Item 10</th>
-          </tr>
-          <tr>
-            <td>
-              <input type="text" value="Breakfast" readonly>
-            </td>
-            <td v-for="index in 10" :key="index">
-              <input class="input" v-model="menu.breakfast[index-1]">
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <input type="text" value="Lunch" readonly>
-            </td>
-            <td v-for="index in 10" :key="index">
-              <input class="input" v-model="menu.lunch[index-1]">
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <input type="text" value="Dinner" readonly>
-            </td>
-            <td v-for="index in 10" :key="index">
-              <input class="input" v-model="menu.dinner[index-1]">
-            </td>
-          </tr>
-          <br>
-          <br>
-        </table>
-        <v-btn @click="saveAllData">Save All</v-btn>
-      </v-flex>-->
     </v-layout>
   </v-container>
 </template>
@@ -556,6 +509,7 @@ moment().format();
 export default {
   data() {
     return {
+      fetchDate: "",
       visible: true,
       moment: moment,
       data: {},
@@ -669,20 +623,6 @@ export default {
     };
   },
   methods: {
-    addDay() {
-      this.tableNum = 1;
-    },
-    addWeek() {
-      this.tableNum = 7;
-    },
-    addNewData() {
-      this.data["" + this.newData.selectedDate] = this.newData;
-      // this.newData = { breakfast: [], lunch: [], dinner: [],  };
-    },
-    saveAllData() {
-      // localStorage.setItem("data-123", JSON.stringify(this.data));
-      localStorage.removeItem("data-123");
-    },
     async modifyData(DataType) {
       console.log("Datatyle", DataType);
       let index = 0;
@@ -693,9 +633,10 @@ export default {
         this.newData1.userName = this.newData.userName;
         this.newData1.userHotel = this.newData.userHotel;
         this.newData1.selectedDate = DataType.selectedDate;
-        // console.log("hey1", DataType.meal_type);
-        // console.log("hey2", DataType.item_name);
-        await axios.post(`http://localhost:3000/meals2/insert`, this.newData1);
+        await axios.post(
+          `http://localhost:3000/Kitchen_menu/insert`,
+          this.newData1
+        );
       }
       index = 0;
       for (index; index < DataType.meal_type.lunch.items.length; index++) {
@@ -705,9 +646,10 @@ export default {
         this.newData1.userName = this.newData.userName;
         this.newData1.userHotel = this.newData.userHotel;
         this.newData1.selectedDate = DataType.selectedDate;
-        // console.log("hey1", DataType.meal_type);
-        // console.log("hey2", DataType.item_name);
-        await axios.post(`http://localhost:3000/meals2/insert`, this.newData1);
+        await axios.post(
+          `http://localhost:3000/Kitchen_menu/insert`,
+          this.newData1
+        );
       }
       index = 0;
       for (index; index < DataType.meal_type.dinner.items.length; index++) {
@@ -717,16 +659,14 @@ export default {
         this.newData1.userName = this.newData.userName;
         this.newData1.userHotel = this.newData.userHotel;
         this.newData1.selectedDate = DataType.selectedDate;
-        // console.log("hey1", DataType.meal_type);
-        // console.log("hey2", DataType.item_name);
-        await axios.post(`http://localhost:3000/meals2/insert`, this.newData1);
+        await axios.post(
+          `http://localhost:3000/Kitchen_menu/insert`,
+          this.newData1
+        );
       }
     },
     async addNewTableElementBreakfast() {
-      // console.log(this.newData.breakfast.length);
-      // var max = this.newData.lunch.length;
       console.log(this.newData.meal_type.breakfast.items.length);
-
       if (this.visible) {
         this.modifyData(this.newData);
       }
@@ -746,60 +686,7 @@ export default {
         await this.modifyData(this.newData7);
         console.log("newData", this.newData1);
       }
-
-      // console.log(this.newData.lunch.length);
-      // console.log(this.newData.dinner.length);
-      // if (
-      //   this.newData.breakfast.length >= this.newData.lunch.length &&
-      //   this.newData.breakfast.length > this.newData.dinner.length
-      // ) {
-      //   max = this.newData.breakfast.length;
-      // }
-      // if (
-      //   this.newData.breakfast.length >= this.newData.lunch.length &&
-      //   this.newData.breakfast.length <= this.newData.dinner.length
-      // ) {
-      //   max = this.newData.dinner.length;
-      // }
-      // if (
-      //   this.newData.breakfast.length <= this.newData.lunch.length &&
-      //   this.newData.dinner.length >= this.newData.lunch.length
-      // ) {
-      //   max = this.newData.dinner.length;
-      // }
-      // console.log(max);
-      // let index = 0;
-      // for (index = 0; index < max; index++) {
-      //   // console.log(this.newData1);
-      //   console.log(this.newData.breakfast[index]);
-      //   this.newData1 = {
-      //     breakfast: "None",
-      //     lunch: "None",
-      //     dinner: "None",
-      //     userCity: "",
-      //     userName: "",
-      //     userHotel: "",
-      //     selectedDate: ""
-      //   };
-      //   if (index + 1 <= this.newData.breakfast.length) {
-      //     this.newData1.breakfast = this.newData.breakfast[index];
-      //   }
-      //   if (index + 1 <= this.newData.lunch.length) {
-      //     this.newData1.lunch = this.newData.lunch[index];
-      //   }
-      //   if (index + 1 <= this.newData.dinner.length) {
-      //     this.newData1.dinner = this.newData.dinner[index];
-      //   }
-      //   // this.newData1.lunch = this.newData.lunch[index];
-      //   // this.newData1.dinner = this.newData.dinner[index];
-      //   this.newData1.userCity = this.newData.userCity;
-      //   this.newData1.userHotel = this.newData.userHotel;
-      //   this.newData1.userName = this.newData.userName;
-      //   this.newData1.selectedDate = this.newData.selectedDate;
       console.log("sent Data", this.newData);
-
-      // }
-      // await this.getAllData();
     },
     async updateData() {
       var iter4 = 0;
@@ -807,152 +694,69 @@ export default {
         console.log(this.meow2.length);
         if (this.newData.selectedDate === this.meow2[iter4].date) {
           console.log("Hey there");
-          await axios.delete(`http://localhost:3000/meals2/delete`, {
+          await axios.delete(`http://localhost:3000/Kitchen_menu/delete`, {
             data: { id: this.newData.selectedDate }
           });
         }
       }
       await this.addNewTableElementBreakfast();
     },
+    async displayData() {
+      
+      console.log(this.newData.meal_type.breakfast.items);
+        // (this.newData.userCity = ""),
+        // (this.newData.userHotel = ""),
+        // (this.newData.userName = ""),
+        axios.post("http://localhost:3000/date", {
+          todo: this.fetchDate
+        });
+
+      const tableData1 = await axios.get(
+        "http://localhost:3000/Kitchen_menu/databreakfast"
+      );
+      // }
+      var meow = tableData1.data;
+      console.log("Main Meow", meow);
+
+      // this.newData.userCity=meow[0].usercity;
+      // this.newData.userName=meow[0].username;
+      // this.newData.userHotel=meow[0].userhotel;
+      this.newData.meal_type.breakfast.items = [];
+      for (var iter8 = 0; iter8 < meow.length; iter8++) {
+        this.newData.selectedDate = meow[iter8].date;
+        this.newData.meal_type.breakfast.items.push(meow[iter8].item_name);
+      }
+
+      const tableData8 = await axios.get(
+        "http://localhost:3000/Kitchen_menu/datalunch"
+      );
+      console.log("DataLunch", tableData8);
+      var meow8 = tableData8.data;
+      this.newData.meal_type.lunch.items = []
+      for (var iter8 = 0; iter8 < meow8.length; iter8++) {
+        this.newData.meal_type.lunch.items.push(meow8[iter8].item_name);
+      }
+      const tableData9 = await axios.get(
+        "http://localhost:3000/Kitchen_menu/datadinner"
+      );
+      // }
+      var meow9 = tableData9.data;
+      this.newData.meal_type.dinner.items = []
+      for (var iter8 = 0; iter8 < meow9.length; iter8++) {
+        this.newData.meal_type.dinner.items.push(meow9[iter8].item_name);
+      }
+    },
     async getAllData() {
-      console.log(this.data1);
-      // const tableSchema = await axios.get(
-      //   `http://localhost:3000/breakfast/schema`
-      // );
-      const tableData = await axios.get(`http://localhost:3000/meals2`);
+      const tableData = await axios.get(`http://localhost:3000/Kitchen_menu`);
       const tableData3 = await axios.get(
-        "http://localhost:3000/meals2/getdistinct"
+        "http://localhost:3000/Kitchen_menu/getdistinct"
       );
       this.meow2 = tableData3.data;
-      var tableData1=0;
-      var iter5=0;
-      // for (iter5; iter5<this.meow2.length;iter5++)
-      // {
-        console.log('meowew' , this.meow2[iter5].date);
-      tableData1 = await axios.get(
-        "http://localhost:3000/meals2/somedata"
-        // {
-        //   data: { id1: this.meow2[iter5].date }
-        // }
-      );
-      // }
-      console.log('tableData',tableData1)
-      
-      // var meow;
-      var meow = tableData1.data;
-      
-      // console.log()
-      console.log("New Data", meow);
-      console.log("New Datasssss", this.meow2);
-      var iter1 = 0;
-      for (iter1; iter1 < this.meow2.length; iter1++) {
-        var iter2 = 0;
-        for (iter2; iter2 < meow.length; iter2++) {
-          if (meow[iter2].date === this.meow2[iter1].date) {
-            // console.log(meow[iter2].date);
-            // console.log(this.meow2[iter1].date);
-            if (meow[iter2].meal_type === "breakfast") {
-              this.items.breakfast.push(meow[iter2].item_name);
-              // console.log('pushed',this.items.breakfast);
-            }
-            if (meow[iter2].meal_type === "lunch") {
-              this.items.lunch.push(meow[iter2].item_name);
-            }
-            if (meow[iter2].meal_type === "dinner") {
-              this.items.dinner.push(meow[iter2].item_name);
-            }
-          }
-        }
-      }
-      console.log("itemsss", this.items);
 
-      // let arr2 = [];
-      // arr2 = await axios.get('http://localhost:3000/meals2/somedatameal');
-      // console.log('Newest', arr2);
-
-      // this.tableSchema = tableSchema.data;
-
-      // console.log(tableData);
       this.data1 = tableData.data;
       console.log("data1", this.data1);
-      // console.log(this.data1.length);
 
-      // console.log(this.items);
-      // let arr1 = ["hi"];
-      // let index1 = 0;
-      // for (index1; index1 < this.data1.length; index1++) {
-      //   var i;
-      //   var bool=true;
-
-      //   for (i = 0; i < arr1.length; i++) {
-      //     if (arr1[i] === this.data1[index1].date) {
-      //       console.log(i);
-      //       bool=false;
-      //     }
-      //   }
-      //   console.log(bool);
-      //   console.log('upper',arr1);
-      //   if(bool){
-      //   if (this.data1[index1].meal_type == "breakfast") {
-      //     console.log("hi");
-      //     this.items.date.breakfast[index1] += this.data1[index1].item_name;
-      //   }
-      //   if (this.data1[index1].meal_type == "lunch") {
-      //     this.items.date.lunch[index1] += this.data1[index1].item_name;
-      //   }
-      //   if (this.data1[index1].meal_type == "dinner") {
-      //     this.items.date.dinner[index1] += this.data1[index1].item_name;
-      //   }}
-      //   arr1.push(this.data1[index1].date);
-      // }
-      // console.log("Modified Data", this.items);
-      // console.log(arr1)
       await this.updateData();
-    },
-    async printTable() {
-      let index = 0;
-      let index1 = 0;
-      let arr = [];
-      // console.log(this.data1);
-      for (index = 0; index < this.data1.length; index++) {
-        // this.data1.slice().sort();console.log(this.data1);
-        for (index1 = index + 1; index1 < this.data1.length; index1++) {
-          // console.log(index);
-          // console.log(index1);
-
-          // console.log(this.data1[index].date);
-          // console.log(this.data1[index1].date);
-          if (this.data1[index].date === this.data1[index1].date) {
-            // console.log(this.data1[index1].breakfast);
-            // console.log(this.data1[index].breakfast);
-            // let meow = this.data1[index+1].breakfast.toString() + "," ;
-            this.data1[index].breakfast =
-              this.data1[index].breakfast.toString() +
-              "," +
-              this.data1[index1].breakfast.toString();
-            this.data1[index].lunch =
-              this.data1[index].lunch.toString() +
-              "," +
-              this.data1[index1].lunch.toString();
-            this.data1[index].dinner =
-              this.data1[index].dinner.toString() +
-              "," +
-              this.data1[index1].dinner.toString();
-            arr.push(index);
-            // let meow3 = meow + meow2;
-            // console.log("hi",this.data1[index].breakfast );
-          }
-        }
-        console.log("array", arr);
-        // index1 = 0;
-        this.data1[index].breakfast = this.data1[index].breakfast.split(",");
-        this.data1[index].lunch = this.data1[index].lunch.split(",");
-        this.data1[index].dinner = this.data1[index].dinner.split(",");
-      }
-      // for(index )
-      // console.log('breakfast', this.data1[index].breakfast, typeof(this.data1[0]));
-      // this.data1.breakfast=tableData.data.breakfast.split(',');
-      console.log(this.data1);
     }
   },
   created() {
@@ -960,7 +764,6 @@ export default {
     console.log("Current Date is ", currentTime);
     const x = localStorage.getItem("data-123");
     if (x) this.data = JSON.parse(x);
-    // localStorage.removeItem('data-123');
   },
   computed: {
     formattedDate() {

@@ -1,160 +1,183 @@
-const express = require('express');
-const mysql = require('mysql');
-const cors = require('cors');
-
+const express = require("express");
+const mysql = require("mysql");
+const cors = require("cors");
+var bodyParser = require("body-parser");
 
 const app = express();
-const db = mysql.createConnection({
-  host: 'localhost',
-  database: 'data1',
-  user: 'root',
-  password: 'password'
-})
+app.use(bodyParser.urlencoded({ extended: false }));
 
-const query = (sqlStatement) => 
+// parse application/json
+app.use(bodyParser.json());
+const db = mysql.createConnection({
+  host: "localhost",
+  database: "data1",
+  user: "root",
+  password: "password"
+});
+
+const query = sqlStatement =>
   new Promise((resolve, reject) => {
     db.query(sqlStatement, (err, results) => {
-      if (err)
-        return reject(err);
+      if (err) return reject(err);
       resolve(results);
-    })
+    });
   });
 
+app.use(
+  cors({
+    origin: "http://localhost:8080"
+  })
+);
+// app.use(express.json());
+// app.use(express.urlencoded());
 
-app.use(cors({
-  origin: 'http://localhost:8080'
-}));
-app.use(express.json());
-app.use(express.urlencoded());
+app.get("/", (req, res) => {
+  res.send("Hello World");
+});
 
-app.get('/', (req, res) => {
-  res.send('Hello World');
-})
-
+let meow = "";
 
 /**
- * this mehtod returns all the records of a given table 
- * @param {string} tableName 
+ * this mehtod returns all the records of a given table
+ * @param {string} tableName
  */
-const getAllTableData = (tableName) => 
-  async (req, res) => {
-    const tableData = await query(`select * from ${tableName}`);
-    res.json(tableData);
-  }
 
-const getSomeTableData = (tableName) => 
-  async (req, res) => {
-    // console.log(req.body.id);
-    const tableData1 = await query(`select item_name, date from ${tableName}  WHERE meal_type="breakfast"`);
-    // tableData1.forEach(element => {
-    //   console.log(element);
-    //   const tableData2 =  query(`select * from ${tableName} WHERE date = ${element}`);
-    // });
-    // console.log(tableData1);
-    res.json(tableData1);
-  }  
+const getAllTableData = tableName => async (req, res) => {
+  const tableData = await query(`select * from ${tableName}`);
+  res.json(tableData);
+};
 
-  const getDistinctDates = (tableName) => 
-  async (req, res) => {
-    const tableData3 = await query(`select DISTINCT date from ${tableName}`);
-    // tableData1.forEach(element => {
-    //   console.log(element);
-    //   const tableData2 =  query(`select * from ${tableName} WHERE date = ${element}`);
-    // });
-    // console.log(tableData3);
-    res.json(tableData3);
-  }  
+const getSomeTableDataBreakfast = tableName => async (req, res) => {
+  // console.log("log2", meow);
+  const tableData1 = await query(
+    `select * from ${tableName} where meal_type = "breakfast" and date='${meow}'`
+  );
+  res.json(tableData1);
+};
 
+const getSomeTableDataLunch = tableName => async (req, res) => {
+  console.log("log2lunch", meow);
+  const tableData8 = await query(
+    `select * from ${tableName} where meal_type = "lunch" and date='${meow}'`
+  );
+  console.log(tableData8);
+  res.json(tableData8);
+};
 
-  /**
- * this mehtod uses the ID from the body of the request object to delete the record in the table 
- * @param {string} tableName 
+const getSomeTableDataDinner = tableName => async (req, res) => {
+  // console.log("log2", meow);
+  const tableData9 = await query(
+    `select * from ${tableName} where meal_type = "dinner" and date='${meow}'`
+  );
+  res.json(tableData9);
+};
+// console.log('Try',meow);
+
+const getDistinctDates = tableName => async (req, res) => {
+  const tableData3 = await query(`select DISTINCT date from ${tableName}`);
+  // tableData1.forEach(element => {
+  //   console.log(element);
+  //   const tableData2 =  query(`select * from ${tableName} WHERE date = ${element}`);
+  // });
+  // console.log(tableData3);
+  res.json(tableData3);
+};
+
+// const getDate = () => async(req,res) => {
+//   console.log(req.body.id2);
+// }
+
+/**
+ * this mehtod uses the ID from the body of the request object to delete the record in the table
+ * @param {string} tableName
  */
-const deleteTableRow = (tableName) =>
-async (req, res) => {
+const deleteTableRow = tableName => async (req, res) => {
   console.log(req.body.id);
-  const deletedRow = await query(`delete from ${tableName} where date='${req.body.id}'`);
+  const deletedRow = await query(
+    `delete from ${tableName} where date='${req.body.id}'`
+  );
   res.json(deletedRow);
-}
-// let data1=json(tableData1);  
+};
+// let data1=json(tableData1);
 // // let tableData2 = [];
-//   const getSomeMealData = (tableName) => 
+//   const getSomeMealData = (tableName) =>
 //   async (req, res) => {
 //     const index=0;
 //     for(index;index<data1.data.length;index++){
 //     const tableData2 = await query(`select * from ${tableName} WHERE date= ${tableData1.data[index]}`);
 //     res.json(tableData2);}
-    
-//   }  
 
+//   }
 
 /**
- * this mehtod returns the tables schema 
- * @param {string} tableName 
+ * this mehtod returns the tables schema
+ * @param {string} tableName
  */
-const getTableSchema = (tableName) => 
-  async (req, res) => {
-    const tableSchema = await query(`describe ${tableName}`);
-    res.json(tableSchema);
-  }
+const getTableSchema = tableName => async (req, res) => {
+  const tableSchema = await query(`describe ${tableName}`);
+  res.json(tableSchema);
+};
 /**
  * this mehtod insertes a new table record filling the ID automatically meaning no need to send the ID with the request
- * @param {string} tableName 
+ * @param {string} tableName
  */
-const insertTableRow = (tableName) =>
-  async (req, res) => {
-    //first value is always the ID which is auto generated by MySQL
-    let sqlValuesStatment = '(NULL';
-    for (let column in req.body) {
-      sqlValuesStatment += `, '${req.body[column]}'`;
-    }
-    sqlValuesStatment += ')';
-    console.log(sqlValuesStatment);
-    const insertedTableRow = await query(`insert into ${tableName} values ${sqlValuesStatment}`);
-    res.json(insertedTableRow);
+const insertTableRow = tableName => async (req, res) => {
+  //first value is always the ID which is auto generated by MySQL
+  let sqlValuesStatment = "(NULL";
+  for (let column in req.body) {
+    sqlValuesStatment += `, '${req.body[column]}'`;
   }
-
-  
+  sqlValuesStatment += ")";
+  console.log(sqlValuesStatment);
+  const insertedTableRow = await query(
+    `insert into ${tableName} values ${sqlValuesStatment}`
+  );
+  res.json(insertedTableRow);
+};
 
 /**
- * this mehtod uses the ID from the body of the request object to update the record 
- * @param {string} tableName 
+ * this mehtod uses the ID from the body of the request object to update the record
+ * @param {string} tableName
  */
-const updateTableRow = (tableName) =>
-  async (req, res) => {
-    let sqlSetStatment = 'set '
-    for (let column in req.body) {
-      if (column === 'id') continue;
-      sqlSetStatment += `${column} = '${req.body[column]}',`;
-    }
-    sqlSetStatment = sqlSetStatment.slice(0, -1);
-
-    const updatedRow = await query(`update ${tableName} ${sqlSetStatment} where id=${req.body.id}`);
-    res.json(updatedRow);
+const updateTableRow = tableName => async (req, res) => {
+  let sqlSetStatment = "set ";
+  for (let column in req.body) {
+    if (column === "id") continue;
+    sqlSetStatment += `${column} = '${req.body[column]}',`;
   }
+  sqlSetStatment = sqlSetStatment.slice(0, -1);
 
+  const updatedRow = await query(
+    `update ${tableName} ${sqlSetStatment} where id=${req.body.id}`
+  );
+  res.json(updatedRow);
+};
 
 /**
  * this method creates the basic API template for a given table name using the name as route of the api
- * @param {string} tableName 
+ * @param {string} tableName
  */
-const createTableBasicAPI = (tableName) => {
+const createTableBasicAPI = tableName => {
+  app.post("/date", (req, res) => {
+    meow = req.body.todo;
+    console.log("log1", req.body.todo);
+  });
   app.get(`/${tableName}`, getAllTableData(`${tableName}`));
-  app.get(`/${tableName}/somedata`, getSomeTableData(`${tableName}`));
+  app.get(`/${tableName}/databreakfast`, getSomeTableDataBreakfast(`${tableName}`));
+  app.get(`/${tableName}/datalunch`, getSomeTableDataLunch(`${tableName}`));
+  app.get(`/${tableName}/datadinner`, getSomeTableDataDinner(`${tableName}`));
   app.get(`/${tableName}/getdistinct`, getDistinctDates(`${tableName}`));
   app.get(`/${tableName}/schema`, getTableSchema(`${tableName}`));
   app.post(`/${tableName}/insert`, insertTableRow(`${tableName}`));
+
   app.delete(`/${tableName}/delete`, deleteTableRow(`${tableName}`));
   app.patch(`/${tableName}/update`, updateTableRow(`${tableName}`));
-}
+};
 
-createTableBasicAPI('meals');
-createTableBasicAPI('meals2');
-createTableBasicAPI('breakfast');
-createTableBasicAPI('lunch');
-createTableBasicAPI('dinner');
+createTableBasicAPI("meals");
+createTableBasicAPI("Kitchen_menu");
+createTableBasicAPI("breakfast");
+createTableBasicAPI("lunch");
+createTableBasicAPI("dinner");
 
-
-
-
-app.listen(3000, () => console.log('Listening at http://localhost:3000/'))
+app.listen(3000, () => console.log("Listening at http://localhost:3000/"));
