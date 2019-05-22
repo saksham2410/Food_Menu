@@ -41,6 +41,53 @@ const getAllTableData = (tableName) =>
     const tableData = await query(`select * from ${tableName}`);
     res.json(tableData);
   }
+
+const getSomeTableData = (tableName) => 
+  async (req, res) => {
+    // console.log(req.body.id);
+    const tableData1 = await query(`select item_name, date from ${tableName}  WHERE meal_type="breakfast"`);
+    // tableData1.forEach(element => {
+    //   console.log(element);
+    //   const tableData2 =  query(`select * from ${tableName} WHERE date = ${element}`);
+    // });
+    // console.log(tableData1);
+    res.json(tableData1);
+  }  
+
+  const getDistinctDates = (tableName) => 
+  async (req, res) => {
+    const tableData3 = await query(`select DISTINCT date from ${tableName}`);
+    // tableData1.forEach(element => {
+    //   console.log(element);
+    //   const tableData2 =  query(`select * from ${tableName} WHERE date = ${element}`);
+    // });
+    // console.log(tableData3);
+    res.json(tableData3);
+  }  
+
+
+  /**
+ * this mehtod uses the ID from the body of the request object to delete the record in the table 
+ * @param {string} tableName 
+ */
+const deleteTableRow = (tableName) =>
+async (req, res) => {
+  console.log(req.body.id);
+  const deletedRow = await query(`delete from ${tableName} where date='${req.body.id}'`);
+  res.json(deletedRow);
+}
+// let data1=json(tableData1);  
+// // let tableData2 = [];
+//   const getSomeMealData = (tableName) => 
+//   async (req, res) => {
+//     const index=0;
+//     for(index;index<data1.data.length;index++){
+//     const tableData2 = await query(`select * from ${tableName} WHERE date= ${tableData1.data[index]}`);
+//     res.json(tableData2);}
+    
+//   }  
+
+
 /**
  * this mehtod returns the tables schema 
  * @param {string} tableName 
@@ -66,15 +113,9 @@ const insertTableRow = (tableName) =>
     const insertedTableRow = await query(`insert into ${tableName} values ${sqlValuesStatment}`);
     res.json(insertedTableRow);
   }
-/**
- * this mehtod uses the ID from the body of the request object to delete the record in the table 
- * @param {string} tableName 
- */
-const deleteTableRow = (tableName) =>
-  async (req, res) => {
-    const deletedRow = await query(`delete from ${tableName} where id=${req.body.id}`);
-    res.json(deletedRow);
-  }
+
+  
+
 /**
  * this mehtod uses the ID from the body of the request object to update the record 
  * @param {string} tableName 
@@ -99,6 +140,8 @@ const updateTableRow = (tableName) =>
  */
 const createTableBasicAPI = (tableName) => {
   app.get(`/${tableName}`, getAllTableData(`${tableName}`));
+  app.get(`/${tableName}/somedata`, getSomeTableData(`${tableName}`));
+  app.get(`/${tableName}/getdistinct`, getDistinctDates(`${tableName}`));
   app.get(`/${tableName}/schema`, getTableSchema(`${tableName}`));
   app.post(`/${tableName}/insert`, insertTableRow(`${tableName}`));
   app.delete(`/${tableName}/delete`, deleteTableRow(`${tableName}`));

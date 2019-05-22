@@ -2,7 +2,7 @@
   <v-container>
     <v-layout wrap row>
       <v-flex>
-        <!-- header Constant Table -->
+        <!-- header Constant b-table -->
 
         <table>
           Current Date is :
@@ -489,7 +489,7 @@
         <!-- Footer Buttons -->
 
         <br>
-        <v-btn @click="addNewTableElementBreakfast">Add Data</v-btn>Show All Data:
+        <v-btn @click="getAllData">Add Data</v-btn>Show All Data:
         <v-btn @click="getAllData">Show Data</v-btn>
         <br>
         <br>
@@ -559,7 +559,8 @@ export default {
       visible: true,
       moment: moment,
       data: {},
-      items: {  breakfast: [], lunch: [], dinner: []  },
+      meow2: [],
+      items: { breakfast: [], lunch: [], dinner: [] },
       meal_type: ["breakfast", "lunch", "dinner"],
       data1: {
         meal_type: "",
@@ -800,45 +801,71 @@ export default {
       // }
       // await this.getAllData();
     },
+    async updateData() {
+      var iter4 = 0;
+      for (iter4; iter4 < this.meow2.length; iter4++) {
+        console.log(this.meow2.length);
+        if (this.newData.selectedDate === this.meow2[iter4].date) {
+          console.log("Hey there");
+          await axios.delete(`http://localhost:3000/meals2/delete`, {
+            data: { id: this.newData.selectedDate }
+          });
+        }
+      }
+      await this.addNewTableElementBreakfast();
+    },
     async getAllData() {
       console.log(this.data1);
       // const tableSchema = await axios.get(
       //   `http://localhost:3000/breakfast/schema`
       // );
       const tableData = await axios.get(`http://localhost:3000/meals2`);
-      const tableData1 = await axios.get('http://localhost:3000/meals2/somedata');
-      const tableData3 = await axios.get('http://localhost:3000/meals2/getdistinct');
+      const tableData3 = await axios.get(
+        "http://localhost:3000/meals2/getdistinct"
+      );
+      this.meow2 = tableData3.data;
+      var tableData1=0;
+      var iter5=0;
+      // for (iter5; iter5<this.meow2.length;iter5++)
+      // {
+        console.log('meowew' , this.meow2[iter5].date);
+      tableData1 = await axios.get(
+        "http://localhost:3000/meals2/somedata"
+        // {
+        //   data: { id1: this.meow2[iter5].date }
+        // }
+      );
+      // }
+      console.log('tableData',tableData1)
+      
       // var meow;
-      var meow=tableData1.data;
-      var meow2 = tableData3.data;
-      console.log('New Data', meow);
-      console.log('New Datasssss', meow2);
-      var iter1=0;
-      for(iter1;iter1<meow2.length;iter1++)
-      {
-        var iter2=0;
-        for(iter2;iter2<meow.length;iter2++)
-        {
-          if(meow[iter2].date===meow2[iter1].date){
-            console.log(meow[iter2].date);
-            console.log(meow2[iter1].date);
-          if(meow[iter2].meal_type==="breakfast")
-          {
-            this.items.breakfast.push(meow[iter2].item_name);
-            console.log('pushed',this.items.breakfast);
+      var meow = tableData1.data;
+      
+      // console.log()
+      console.log("New Data", meow);
+      console.log("New Datasssss", this.meow2);
+      var iter1 = 0;
+      for (iter1; iter1 < this.meow2.length; iter1++) {
+        var iter2 = 0;
+        for (iter2; iter2 < meow.length; iter2++) {
+          if (meow[iter2].date === this.meow2[iter1].date) {
+            // console.log(meow[iter2].date);
+            // console.log(this.meow2[iter1].date);
+            if (meow[iter2].meal_type === "breakfast") {
+              this.items.breakfast.push(meow[iter2].item_name);
+              // console.log('pushed',this.items.breakfast);
+            }
+            if (meow[iter2].meal_type === "lunch") {
+              this.items.lunch.push(meow[iter2].item_name);
+            }
+            if (meow[iter2].meal_type === "dinner") {
+              this.items.dinner.push(meow[iter2].item_name);
+            }
           }
-          if(meow[iter2].meal_type==="lunch")
-          {
-            this.items.lunch.push(meow[iter2].item_name);
-          }
-          if(meow[iter2].meal_type==="dinner")
-          {
-            this.items.dinner.push(meow[iter2].item_name);
-          }}
         }
       }
-      console.log('itemsss',this.items);
-      
+      console.log("itemsss", this.items);
+
       // let arr2 = [];
       // arr2 = await axios.get('http://localhost:3000/meals2/somedatameal');
       // console.log('Newest', arr2);
@@ -846,10 +873,9 @@ export default {
       // this.tableSchema = tableSchema.data;
 
       // console.log(tableData);
-      // this.data1 = tableData.data;
-      // console.log(this.data1);
+      this.data1 = tableData.data;
+      console.log("data1", this.data1);
       // console.log(this.data1.length);
-
 
       // console.log(this.items);
       // let arr1 = ["hi"];
@@ -881,7 +907,7 @@ export default {
       // }
       // console.log("Modified Data", this.items);
       // console.log(arr1)
-      // await this.printTable();
+      await this.updateData();
     },
     async printTable() {
       let index = 0;
