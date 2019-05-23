@@ -51,20 +51,23 @@
             </th>
           </tr>
         </table>
-        <br>Add for a day :
-        <v-btn v-on:click="visible = true">Add Day</v-btn>Add for this week :
+        Add for this week :
         <input type="date" v-model="newData.selectedDate">
-        <v-btn v-on:click="visible = false" @click="setNewDate">Add for this Week</v-btn>
+        <v-btn v-on:click="visible = !visible" @click="setNewDate">Add for this Week</v-btn>
         <br>
+        <br>Add for a day :
+        <input type="date" v-model="newData.selectedDate">
+        <v-btn v-on:click="visible = true">Add Day</v-btn>
         <br>
+        
 
         <!-- Table in which we enter the data -->
 
-        <table v-show="visible">
+        <table v-if="visible">
           <br>
           <tr>
             <th>
-              <input type="date" v-model="newData.selectedDate">
+              Date : {{this.newData.selectedDate}}
             </th>
             <th>Item 1</th>
             <th>Item 2</th>
@@ -429,13 +432,13 @@
         <!-- Footer Buttons -->
 
         <br>
-        <v-btn @click="getAllData">Add Data</v-btn>
+        <v-btn @click="setNewDate();getAllData();">Add Data</v-btn>
         {{successtext}}
         <v-btn @click="updateState" v-if="this.successtext==='Added'">OK</v-btn>
         <br>
         <br>Get Data for :
         <input type="date" v-model="fetchDate">
-        <v-btn v-on:click="visible = true" @click="setDate(displayData);">Show Data</v-btn>
+        <v-btn v-on:click="visible = true" @click="setNewDate();setDate(displayData);">Show Data</v-btn>
         <br>
         <br>
         <br>
@@ -654,6 +657,7 @@ export default {
       await this.addNewTableElementBreakfast();
     },
     setDate(callback) {
+      console.log(this.fetchDate);
       axios.post("http://localhost:3000/date", {
         todo: this.fetchDate
       });
@@ -740,32 +744,45 @@ export default {
       }
     },
     setNewDate() {
-      var time = this.newData.selectedDate; // I would get this from the database
-      this.newData0.selectedDate = moment(time, "YYYY-MM-DD").format(
-        "DD/MM/YYYY"
-      );
-      // console.log(time);
-      // console.log(this.day);
-      this.newData2.selectedDate = moment(time, "YYYY-MM-DD")
-        .add(1, "day")
-        .format("DD/MM/YYYY");
-      // console.log(this.newData0.selectedDate);
-      // console.log(this.newData2.selectedDate);
-      this.newData3.selectedDate = moment(time, "YYYY-MM-DD")
-        .add(2, "day")
-        .format("DD/MM/YYYY");
-      this.newData4.selectedDate = moment(time, "YYYY-MM-DD")
-        .add(3, "day")
-        .format("DD/MM/YYYY");
-      this.newData5.selectedDate = moment(time, "YYYY-MM-DD")
-        .add(4, "day")
-        .format("DD/MM/YYYY");
-      this.newData6.selectedDate = moment(time, "YYYY-MM-DD")
-        .add(5, "day")
-        .format("DD/MM/YYYY");
-      this.newData7.selectedDate = moment(time, "YYYY-MM-DD")
-        .add(6, "day")
-        .format("DD/MM/YYYY");
+      var time = this.newData.selectedDate;
+      var time1 = this.fetchDate;
+
+      this.fetchDate = moment(time1, "YYYY-MM-DD").format(
+          "dddd" + " " + "DD/MM/YYYY"
+        ); // I would get this from the database
+      if (this.visible === true) {
+        console.log('reached here',this.newData.selectedDate)
+        this.newData.selectedDate = moment(time, "YYYY-MM-DD").format(
+          "dddd" + " " + "DD/MM/YYYY"
+        );
+      }
+      if (this.visible === false) {
+        this.newData0.selectedDate = moment(time, "YYYY-MM-DD").format(
+          "dddd" + " " + "DD/MM/YYYY"
+        );
+        // console.log(time);
+        // console.log(this.day);
+        this.newData2.selectedDate = moment(time, "YYYY-MM-DD")
+          .add(1, "day")
+          .format("dddd" + " " + "DD/MM/YYYY");
+        // console.log(this.newData0.selectedDate);
+        // console.log(this.newData2.selectedDate);
+        this.newData3.selectedDate = moment(time, "YYYY-MM-DD")
+          .add(2, "day")
+          .format("dddd" + " " + "DD/MM/YYYY");
+        this.newData4.selectedDate = moment(time, "YYYY-MM-DD")
+          .add(3, "day")
+          .format("dddd" + " " + "DD/MM/YYYY");
+        this.newData5.selectedDate = moment(time, "YYYY-MM-DD")
+          .add(4, "day")
+          .format("dddd" + " " + "DD/MM/YYYY");
+        this.newData6.selectedDate = moment(time, "YYYY-MM-DD")
+          .add(5, "day")
+          .format("dddd" + " " + "DD/MM/YYYY");
+        this.newData7.selectedDate = moment(time, "YYYY-MM-DD")
+          .add(6, "day")
+          .format("dddd" + " " + "DD/MM/YYYY");
+      }
 
       // time = time.split("-");
       // day.set({
