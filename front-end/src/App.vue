@@ -1,35 +1,38 @@
 <template>
-  <div id="app" class="container">
-    <h5 class='display-2'>ZoloStays Menu Update Table</h5>
-    <!-- <p>
-      <router-link to="/wastage">Wastage Table</router-link> <br>
-      <router-link to="/menu">Food-Menu Table</router-link><br> -->
-    <!-- </p> -->
-    <router-view></router-view>
-  </div>
+  <v-app>
+    <v-toolbar app>
+      <v-toolbar-title class="headline text-uppercase">
+        <span>Vuetify</span>
+        <span class="font-weight-light">MATERIAL DESIGN</span>
+      </v-toolbar-title>
+      <v-spacer></v-spacer>
+      <v-btn
+        flat
+        href="https://github.com/vuetifyjs/vuetify/releases/latest"
+        target="_blank"
+      >
+        <span class="mr-2">Latest Release</span>
+      </v-btn>
+    </v-toolbar>
+
+    <v-content>
+      <Menu/>
+    </v-content>
+  </v-app>
 </template>
 
 <script>
+import Menu from './components/Menu'
+
 export default {
-  name: 'app',
+  name: 'App',
+  components: {
+    Menu
+  },
+  data () {
+    return {
+      //
+    }
+  }
 }
 </script>
-
-<style>
-
-.container{
-  width: 50px;
-  margin: 50px;
-
-  
-
-}
-.display-2 {
-  text-align: center;
-  color: rgb(40, 40, 131);
-  font-size: 2.5rem;
-  font-weight: bold;
-  /* width: 50px; */
-
-}
-</style>

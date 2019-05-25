@@ -1,117 +1,147 @@
 <template>
-  <v-container>
-    <v-layout wrap row>
-      <v-flex>
-        <!-- header Constant b-table -->
+  <v-app id="inspire" dark>
 
-        <table>
-          Current Date is :
-          {{formattedDate}}
-          <!-- {{this.day}} -->
-          <br>
-          <tr>
-            <th>
-              <input
-                type="text"
-                value="username"
-                placeholder="User Name"
-                v-model="newData.userName"
-              >
-            </th>
+    <v-navigation-drawer
+      v-model="drawer"
+      clipped
+      fixed
+      app
+    >
+      <v-list dense>
+        <v-list-tile @click="console.log('Clicked')">
+          <v-list-tile-action>
+            <v-icon>dashboard</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-content>
+            <v-list-tile-title>Dashboard</v-list-tile-title>
+          </v-list-tile-content>
+        </v-list-tile>
+        <v-list-tile @click="console.log('Clicked')">
+          <v-list-tile-action>
+            <v-icon>settings</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-content>
+            <v-list-tile-title>Settings</v-list-tile-title>
+          </v-list-tile-content>
+        </v-list-tile>
+      </v-list>
+    </v-navigation-drawer>
+    <v-toolbar app fixed clipped-left>
+      <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
+      <v-toolbar-title>ZoloStays Menu Update Form</v-toolbar-title>
+    </v-toolbar>
+    <v-content>
+      
+      <v-container fluid fill-height>
+        
+        <v-layout justify-center align-center>
+          
+          <v-flex shrink>
+            <table>
+              Current Date is :
+              {{formattedDate}}
+              <!-- {{this.day}} -->
+              <br>
+              <tr>
+                <th>
+                  <input
+                    type="text"
+                    value="username"
+                    placeholder="User Name"
+                    v-model="newData.userName"
+                  >
+                </th>
 
-            <th>
-              <select v-model="newData.userCity">
-                <option value selected>Select Your City</option>
-                <option value="Bangalore">Bangalore</option>
-                <option value="Mumbai">Mumbai</option>
-                <option value="Delhi">Delhi</option>
-                <option value="Jaipur">Jaipur</option>
-              </select>
-              <!-- <input
-                type="text"
-                value="usercity"
-                placeholder="User City"
-                v-model="newData.userCity"
-              >-->
-            </th>
-            <th>
-              <select v-model="newData.userHotel">
-                <option value selected>Select Your Kitchen</option>
-                <option value="Zolo1">Zolo1</option>
-                <option value="Zolo2">Zolo2</option>
-                <option value="Zolo3">Zolo3</option>
-                <option value="Zolo4">Zolo4</option>
-              </select>
-              <!-- <input
+                <th>
+                  <v-overflow-btn
+          :items="cityNew"
+          label="Zolo City"
+          v-model="newData.userCity"
+          class="test"
+        ></v-overflow-btn>
+                </th>
+                <th>
+                  <v-overflow-btn
+          :items="kitchenName"
+          label="Zolo Kitchen"
+          v-model="newData.userHotel" dark
+        ></v-overflow-btn>
+                </th>
+                <!-- <th>
+                  <select @click="getKitchenData" v-model="newData.userCity">
+                    <option value selected>Select Your City</option>
+                    <option v-for="index in kitchenNewlength" :key="index">{{kitchenNew[index].CITY}}</option>
+                  </select>
+                </th> -->
+                <!-- <th> -->
+                  <!-- <select v-model="newData.userHotel">
+                    <option value selected>Select Your Kitchen</option>
+                    <option value="Zolo1">Zolo1</option>
+                    <option value="Zolo2">Zolo2</option>
+                    <option value="Zolo3">Zolo3</option>
+                    <option value="Zolo4">Zolo4</option>
+                  </select> -->
+                  <!-- <input
                 type="text"
                 value="userhotel"
                 placeholder="User Hotel"
                 v-model="newData.userHotel"
-              >-->
-            </th>
-          </tr>
-        </table>
-        Add for this week :
-        <input type="date" v-model="newData.selectedDate">
-        <v-btn v-on:click="visible = !visible" @click="setNewDate">Add for this Week</v-btn>
-        <br>
-        <br>Add for a day :
-        <input type="date" v-model="newData.selectedDate">
-        <v-btn v-on:click="visible = true">Add Day</v-btn>
-        <br>
-        
+                  >-->
+                <!-- </th> -->
+              </tr>
+            </table>Add for this week :
+            <input type="date" :min="todaydate" class="inputdate" v-model="newData.selectedDate">
+            <v-btn v-on:click="visible = !visible" @click="setNewDate">Add for this Week</v-btn>
+            <!-- <v-btn @click="getKitchenData">Get Kitchen Data</v-btn> -->
+            <br>
+            <br>Add for a day :
+            <input type="date" :min="todaydate" class="inputdate" v-model="newData.selectedDate">
+            <v-btn v-on:click="visible = true">Add Day</v-btn>
+            <br>
+            <table v-if="visible" class="elevation-4">
+              <!-- <template v-slot:items="props"> -->
+              <tr justify-center>
+                <th>Date : {{this.newData.selectedDate}}</th>
+                <th>Item 1</th>
+                <th>Item 2</th>
+                <th>Item 3</th>
+                <th>Item 4</th>
+                <th>Item 5</th>
+                <th>Item 6</th>
+                <th>Item 7</th>
+                <th>Item 8</th>
+                <th>Item 9</th>
+                <th>Item 10</th>
+              </tr>
+              <tr>
+                <th>
+                  <input type="text" v-model="meal_type[0]" readonly>
+                </th>
+                <td v-for="index in 10" :key="index">
+                  <input class="input" v-model="newData.meal_type.breakfast.items[index-1]">
+                </td>
+              </tr>
 
-        <!-- Table in which we enter the data -->
+              <tr>
+                <th>
+                  <input type="text" v-model="meal_type[1]" readonly>
+                </th>
+                <td v-for="index in 10" :key="index">
+                  <input class="input" v-model="newData.meal_type.lunch.items[index-1]">
+                </td>
+              </tr>
 
-        <table v-if="visible">
-          <br>
-          <tr>
-            <th>
-              Date : {{this.newData.selectedDate}}
-            </th>
-            <th>Item 1</th>
-            <th>Item 2</th>
-            <th>Item 3</th>
-            <th>Item 4</th>
-            <th>Item 5</th>
-            <th>Item 6</th>
-            <th>Item 7</th>
-            <th>Item 8</th>
-            <th>Item 9</th>
-            <th>Item 10</th>
-          </tr>
-
-          <tr>
-            <th>
-              <input type="text" v-model="meal_type[0]" readonly>
-            </th>
-            <td v-for="index in 10" :key="index">
-              <input class="input" v-model="newData.meal_type.breakfast.items[index-1]">
-            </td>
-          </tr>
-
-          <tr>
-            <th>
-              <input type="text" v-model="meal_type[1]" readonly>
-            </th>
-            <td v-for="index in 10" :key="index">
-              <input class="input" v-model="newData.meal_type.lunch.items[index-1]">
-            </td>
-          </tr>
-
-          <tr>
-            <th>
-              <input type="text" v-model="meal_type[2]" readonly>
-            </th>
-            <td v-for="index in 10" :key="index">
-              <input class="input" v-model="newData.meal_type.dinner.items[index-1]">
-            </td>
-          </tr>
-        </table>
-
-        <!-- Show Data For a week -->
-
-        <v-flex v-if="!visible">
+              <tr>
+                <th>
+                  <input type="text" v-model="meal_type[2]" readonly>
+                </th>
+                <td v-for="index in 10" :key="index">
+                  <input class="input" v-model="newData.meal_type.dinner.items[index-1]">
+                </td>
+              </tr>
+              <!-- </template> -->
+            </table>
+            <v-flex v-if="!visible">
           <table>
             <br>
             <tr>
@@ -428,32 +458,47 @@
           <br>
           <br>
         </v-flex>
-
-        <!-- Footer Buttons -->
-
         <br>
         <v-btn @click="setNewDate();getAllData();">Add Data</v-btn>
         {{successtext}}
         <v-btn @click="updateState" v-if="this.successtext==='Added'">OK</v-btn>
         <br>
         <br>Get Data for :
-        <input type="date" v-model="fetchDate">
+        <input type="date" class="inputdate" v-model="fetchDate">
         <v-btn v-on:click="visible = true" @click="setNewDate();setDate(displayData);">Show Data</v-btn>
         <br>
         <br>
         <br>
+        <v-flex>
+          <br>
+          <br>
+          <v-flex>
+        <v-img :src="require('../assets/zolo-logo.png')" class="my-3" contain height="50"></v-img>
       </v-flex>
-    </v-layout>
-  </v-container>
+          <br>
+          <br>
+        </v-flex>
+          </v-flex>
+        </v-layout>
+      </v-container>
+    </v-content>
+    <v-footer app fixed>
+      <span>&copy; Zolostays 2019</span>
+    </v-footer>
+  </v-app>
 </template>
 
 <script>
 import axios from "axios";
 var moment = require("moment");
-moment().format();
 export default {
   data() {
     return {
+      // dropdown_font: [],
+      kitchenNew: [],
+      todaydate: '',
+      kitchenName: [],
+      cityNew: [],
       day: "",
       successtext: "",
       fetchDate: "",
@@ -462,7 +507,7 @@ export default {
       data: {},
       meow2: [],
       items: { breakfast: [], lunch: [], dinner: [] },
-      meal_type: ["breakfast", "lunch", "dinner"],
+      meal_type: ["Breakfast", "Lunch", "Dinner"],
       data1: {
         meal_type: "",
         item_name: "",
@@ -548,6 +593,7 @@ export default {
         userHotel: "",
         selectedDate: ""
       },
+      drawer: null,
       newData: {
         meal_type: {
           breakfast: { type: "breakfast", items: [] },
@@ -569,9 +615,13 @@ export default {
       }
     };
   },
+  props: {
+    source: String
+  },
+
   methods: {
     async modifyData(DataType) {
-      console.log("Datatyle", DataType);
+      // console.log("Datatyle", DataType);
       let index = 0;
       for (index; index < DataType.meal_type.breakfast.items.length; index++) {
         this.newData1.meal_type = DataType.meal_type.breakfast.type;
@@ -611,44 +661,45 @@ export default {
           this.newData1
         );
       }
+      // console.log('Final Data Sent',this.newData1)
     },
     updateState() {
       this.successtext = "";
     },
     async addNewTableElementBreakfast() {
-      console.log(this.newData.meal_type.breakfast.items.length);
+      // console.log(this.newData.meal_type.breakfast.items.length);
       if (this.visible) {
         this.modifyData(this.newData);
       }
       if (!this.visible) {
         await this.modifyData(this.newData0);
-        console.log("newData", this.newData1);
+        // console.log("newData", this.newData1);
         await this.modifyData(this.newData2);
-        console.log("newData", this.newData1);
+        // console.log("newData", this.newData1);
         await this.modifyData(this.newData3);
-        console.log("newData", this.newData1);
+        // console.log("newData", this.newData1);
         await this.modifyData(this.newData4);
-        console.log("newData", this.newData1);
+        // console.log("newData", this.newData1);
         await this.modifyData(this.newData5);
-        console.log("newData", this.newData1);
+        // console.log("newData", this.newData1);
         await this.modifyData(this.newData6);
-        console.log("newData", this.newData1);
+        // console.log("newData", this.newData1);
         await this.modifyData(this.newData7);
-        console.log("newData", this.newData1);
+        // console.log("newData", this.newData1);
       }
-      console.log("sent Data", this.newData);
+      // console.log("sent Data", this.newData);
       this.successtext = "Added";
       // this.newData=[];
     },
     async updateData() {
-      console.log("Reached Here", this.meow2.length);
+      // console.log("Reached Here", this.meow2.length);
       var iter4 = 0;
       for (iter4; iter4 < this.meow2.length; iter4++) {
-        console.log(this.meow2.length);
-        console.log("Hey there", this.newData.selectedDate);
-        console.log("heyheyehye", this.meow2[iter4].daily_date);
+        // console.log(this.meow2.length);
+        // console.log("Hey there", this.newData.selectedDate);
+        // console.log("heyheyehye", this.meow2[iter4].daily_date);
         if (this.newData.selectedDate === this.meow2[iter4].daily_date) {
-          console.log("Hey there", this.newData.selectedDate);
+          // console.log("Hey there", this.newData.selectedDate);
           await axios.delete(`http://localhost:3000/Kitchen_menu/delete`, {
             data: { id: this.newData.selectedDate }
           });
@@ -657,9 +708,9 @@ export default {
       await this.addNewTableElementBreakfast();
     },
     setDate(callback) {
-      console.log(this.fetchDate);
+      // console.log(this.fetchDate);
       axios.post("http://localhost:3000/date", {
-        todo: this.fetchDate
+        todo: this.fetchDate, todo1: this.newData.userHotel
       });
 
       // const value = await promise;
@@ -671,9 +722,9 @@ export default {
     async displayData() {
       this.newData = {
         meal_type: {
-          breakfast: { type: "breakfast", items: [] },
-          lunch: { type: "lunch", items: [] },
-          dinner: { type: "dinner", items: [] }
+          breakfast: { type: "breakfast", items: ['NA'] },
+          lunch: { type: "lunch", items: ['NA'] },
+          dinner: { type: "dinner", items: ['NA'] }
         },
         userCity: "",
         userName: "",
@@ -694,19 +745,16 @@ export default {
         "http://localhost:3000/Kitchen_menu/databreakfast"
       );
       // }
-      var meowx = tableDatax.data;
-      console.log("Main Meow", meowx);
+      // console.log("Main Meow", meowx);
       const tableData8x = await axios.get(
         "http://localhost:3000/Kitchen_menu/datalunch"
       );
-      console.log("DataLunch", tableData8x);
-      var meow8x = tableData8x.data;
+      // console.log("DataLunch", tableData8x);
 
       const tableData9x = await axios.get(
         "http://localhost:3000/Kitchen_menu/datadinner"
       );
       // }
-      var meow9x = tableData9x.data;
 
       const tableData1 = await axios.get(
         "http://localhost:3000/Kitchen_menu/databreakfast"
@@ -714,24 +762,24 @@ export default {
 
       // }
       var meow = tableData1.data;
-      console.log("Main Meow", meow);
+      // console.log("Main Meow", meow);
 
       // this.newData.userCity=meow[0].usercity;
       // this.newData.userName=meow[0].username;
       // this.newData.userHotel=meow[0].userhotel;
       // this.newData.meal_type.breakfast.items = [];
-      for (var iter8 = 0; iter8 < meow.length; iter8++) {
-        this.newData.meal_type.breakfast.items.push(meow[iter8].item_name);
+      for (var iter8x = 0; iter8x < meow.length; iter8x++) {
+        this.newData.meal_type.breakfast.items.push(meow[iter8x].item_name);
       }
 
       const tableData8 = await axios.get(
         "http://localhost:3000/Kitchen_menu/datalunch"
       );
-      console.log("DataLunch", tableData8);
+      // console.log("DataLunch", tableData8);
       var meow8 = tableData8.data;
       // this.newData.meal_type.lunch.items = []
-      for (var iter8 = 0; iter8 < meow8.length; iter8++) {
-        this.newData.meal_type.lunch.items.push(meow8[iter8].item_name);
+      for (var iter8xx = 0; iter8xx < meow8.length; iter8xx++) {
+        this.newData.meal_type.lunch.items.push(meow8[iter8xx].item_name);
       }
       const tableData9 = await axios.get(
         "http://localhost:3000/Kitchen_menu/datadinner"
@@ -739,28 +787,38 @@ export default {
       // }
       var meow9 = tableData9.data;
       // this.newData.meal_type.dinner.items = []
-      for (var iter8 = 0; iter8 < meow9.length; iter8++) {
-        this.newData.meal_type.dinner.items.push(meow9[iter8].item_name);
+      for (var iter8y = 0; iter8y < meow9.length; iter8y++) {
+        this.newData.meal_type.dinner.items.push(meow9[iter8y].item_name);
       }
     },
     setNewDate() {
       var time = this.newData.selectedDate;
       var time1 = this.fetchDate;
+      console.log("first reached here", time);
+      // var time2 = moment(time, "DD-MM-YYYY").format(
+      //   "dddd" + " " + "DD/MM/YYYY"
+      // );
+      // console.log("reached here", time2);
+      // this.newData.selectedDate = time2;
 
       this.fetchDate = moment(time1, "YYYY-MM-DD").format(
-          "dddd" + " " + "DD/MM/YYYY"
-        ); // I would get this from the database
+        "dddd" + " " + "DD/MM/YYYY"
+      ); // I would get this from the database
       if (this.visible === true) {
-        console.log('reached here',this.newData.selectedDate)
+        // console.log("reached here", time);
         this.newData.selectedDate = moment(time, "YYYY-MM-DD").format(
           "dddd" + " " + "DD/MM/YYYY"
         );
+        console.log("reached again here", this.newData.selectedDate);
+
       }
       if (this.visible === false) {
+        // console.log(time);
         this.newData0.selectedDate = moment(time, "YYYY-MM-DD").format(
           "dddd" + " " + "DD/MM/YYYY"
         );
-        // console.log(time);
+        // this.newData0.selectedDate = time;
+        // console.log(this.newData0.selectedDate);
         // console.log(this.day);
         this.newData2.selectedDate = moment(time, "YYYY-MM-DD")
           .add(1, "day")
@@ -791,115 +849,125 @@ export default {
       //   day: time[2]
       // });
     },
+     async getKitchenData() {
+
+       this.todaydate = moment().format("YYYY-MM-DD");
+       console.log(this.todaydate);
+        const kitchenData = await axios.get(
+        "http://localhost:3000/Zolo_city/userdata"
+      );
+      // var kitchencity = [];
+      this.kitchenNew = kitchenData;
+      // this.kitchenNewlength = this.kitchenNew.data.length;
+      for( var iter9=0;iter9<this.kitchenNew.data.length;iter9++)
+      {
+        this.kitchenName.push(this.kitchenNew.data[iter9].LOCALNAME);
+      }
+
+      const CityData = await axios.get(
+        "http://localhost:3000/Zolo_city/userdatacity"
+      );
+
+      // this.cityNew = CityData.data;
+      for( var iter9=0;iter9<CityData.data.length;iter9++)
+      {
+        this.cityNew.push(CityData.data[iter9].CITY);
+      }
+      console.log('test',this.cityNew);
+      console.log(this.cityNew.length);
+      console.log(this.kitchenName);
+    },
+    
     async getAllData() {
       const tableData = await axios.get(`http://localhost:3000/Kitchen_menu`);
       const tableData3 = await axios.get(
         "http://localhost:3000/Kitchen_menu/getdistinct"
       );
       this.meow2 = tableData3.data;
-      console.log("Distinct Dates", this.meow2);
+      // console.log("Distinct Dates", this.meow2);
 
       this.data1 = tableData.data;
-      console.log("data1", this.data1);
+      // console.log("data1", this.data1);
 
       await this.updateData();
     }
   },
   created() {
-    var currentTime = moment().format("DD MM YYYY");
-    console.log("Current Date is ", currentTime);
-    const x = localStorage.getItem("data-123");
-    if (x) this.data = JSON.parse(x);
+
+    
+    
+  },
+  mounted() {
+
+    this.getKitchenData();
   },
   computed: {
+
     formattedDate() {
-      return moment().format("DD/MM/YYYY");
+      return moment().format("YYYY-MM-DD");
     }
   }
 };
 </script>
-
 <style scoped>
+.test {
+  color: white;
+  /* background: white; */
+}
 table {
   width: 750px;
   border-collapse: collapse;
   margin: 20px auto;
+  overflow: scroll;
+}
+.input-group__input *{
+  color:white
+}
+.v-overflow-btn {
+  color: white;
+}  
+.inputdate{
+  background: #bcbfc2;
+  color: rgb(3, 3, 3);
 }
 .input {
   max-width: 70px;
+  border: 0.1px solid rgb(68, 70, 95);
 }
 /* tr:nth-of-type(odd) { 
 	background: rgb(207, 38, 38); 
 	} */
 
 th {
-  background: #1d5c86;
-  color: white;
+  background: #bcbfc2;
+  color: rgb(3, 3, 3);
   font-weight: bold;
 }
 
 td,
 th {
   padding: 5px;
-  border: 1px solid rgb(43, 54, 206);
+  border: 1px solid rgb(77, 78, 95);
   text-align: left;
   font-size: 18px;
 }
+
+@media only screen and (max-width: 760px),
+  (min-device-width: 300px) and (max-device-width: 1024px) {
+
+    body{
+      background-color: black;
+    }
+
+    table {
+      overflow: scroll;
+    }
+
+  }
 
 /* 
 Max width before this PARTICULAR table gets nasty
 This query will take effect for any screen smaller than 760px
 and also iPads specifically.
 */
-@media only screen and (max-width: 760px),
-  (min-device-width: 768px) and (max-device-width: 1024px) {
-  table {
-    width: 100%;
-  }
-
-  /* Force table to not be like tables anymore */
-  table,
-  thead,
-  tbody,
-  th,
-  td,
-  tr {
-    display: block;
-  }
-
-  /* Hide table headers (but not display: none;, for accessibility) */
-  thead tr {
-    position: absolute;
-    top: -9999px;
-    left: -9999px;
-  }
-
-  tr {
-    border: 1px solid #ccc;
-  }
-
-  td {
-    /* Behave  like a "row" */
-    border: none;
-    border-bottom: 1px solid #eee;
-    position: relative;
-    padding-left: 50%;
-  }
-
-  td:before {
-    /* Now like a table header */
-    position: absolute;
-    /* Top/left values mimic padding */
-    top: 6px;
-    left: 6px;
-    width: 45%;
-    padding-right: 10px;
-    white-space: nowrap;
-    /* Label the data */
-    content: attr(data-column);
-
-    color: #000;
-    font-weight: bold;
-  }
-}
 </style>
