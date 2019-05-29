@@ -1,4 +1,6 @@
 const express = require("express");
+require('dotenv').config()
+var history = require('connect-history-api-fallback');
 const mysql = require("mysql");
 const cors = require("cors");
 var bodyParser = require("body-parser");
@@ -14,12 +16,22 @@ app.use(bodyParser.json());
 //   user: "analytics_admin",
 //   password: "DpWBOfz871Sa"
 // });
+// const mysqlServer = `mysql://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@${process.env.DB_SERVER}`;
 
+// const db = mysql.createConnection({
+//   host: "localhost",
+//   database: "data1",
+//   user: "root",
+//   password: "password"
+// });
+
+
+console.log(process.env.MYSQL_URL);
 const db = mysql.createConnection({
-  host: "localhost",
-  database: "data1",
-  user: "root",
-  password: "password"
+  host     : process.env.MYSQL_URL,
+  user     : process.env.MYSQL_USERNAME,
+  password : process.env.MYSQL_PASSWORD,
+  database : process.env.MYSQL_DATABASE
 });
 
 const query = sqlStatement =>
@@ -35,6 +47,21 @@ app.use(
     origin: "http://localhost:8080"
   })
 );
+
+// Middleware for serving '/dist' directory
+const staticFileMiddleware = express.static('dist');
+
+// 1st call for unredirected requests 
+app.use(staticFileMiddleware);
+
+// Support history api 
+app.use(history({
+  index: '/dist/index.html'
+}));
+
+// 2nd call for redirected requests
+
+
 // app.use(express.json());
 // app.use(express.urlencoded());
 
@@ -61,6 +88,7 @@ const getDate = () => async (req, res) => {
   meoww = req.body.todo1;
   console.log("fetchDate", meow);
   console.log("fetchcity", meoww);
+  res.send('Okays')
   // const insertedTableRow2 = await query(
   //   `insert into Kitchen_menu values (NULL,NULL,NULL,NULL,NULL,NULL,NULL)`
   // );
@@ -80,6 +108,7 @@ const getSomeTableDataBreakfast = tableName => async (req, res) => {
   const tableData1 = await query(
     `select * from ${tableName} where meal_type = "breakfast" and daily_date='${meow}' and userhotel='${meoww}'`
   );
+  console.log('suthar', tableData1);
   res.json(tableData1);
 };
 
@@ -223,7 +252,11 @@ const createTableBasicAPI = tableName => {
 createTableBasicAPI("Kitchen_menu");
 createTableBasicAPI("Zolo_city");
 
-app.listen(3000, () => console.log("Listening at http://localhost:3000/"));
+
+app.use(staticFileMiddleware);
+
+const PORT = process.env.PORT || 3000;
+app.listen(PORT);
 
 
 // import pandas as pd
