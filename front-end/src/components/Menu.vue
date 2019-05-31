@@ -503,6 +503,7 @@ var moment = require("moment");
 export default {
   data() {
     return {
+      baseURl: process.env.VUE_APP_BASE_URL,
       // dropdown_font: [],
       kitchenNew: [],
       todaydate: "",
@@ -643,11 +644,13 @@ export default {
         this.newData1.userHotel = this.newData.userHotel;
         this.newData1.selectedDate = DataType.selectedDate;
         await axios.post(
-          `http://localhost:3000/Kitchen_menu/insert`,
+          this.baseURl + 'Kitchen_menu/insert',
+          // `http://localhost:3000/Kitchen_menu/insert`,
           this.newData1
         );
       }
       index = 0;
+      
       for (index; index < DataType.meal_type.lunch.items.length; index++) {
         this.newData1.meal_type = DataType.meal_type.lunch.type;
         this.newData1.item_name = DataType.meal_type.lunch.items[index];
@@ -656,7 +659,7 @@ export default {
         this.newData1.userHotel = this.newData.userHotel;
         this.newData1.selectedDate = DataType.selectedDate;
         await axios.post(
-          `http://localhost:3000/Kitchen_menu/insert`,
+          this.baseURl + 'Kitchen_menu/insert',
           this.newData1
         );
       }
@@ -669,7 +672,7 @@ export default {
         this.newData1.userHotel = this.newData.userHotel;
         this.newData1.selectedDate = DataType.selectedDate;
         await axios.post(
-          `http://localhost:3000/Kitchen_menu/insert`,
+          this.baseURl + 'Kitchen_menu/insert',
           this.newData1
         );
       }
@@ -712,7 +715,7 @@ export default {
         // console.log("heyheyehye", this.meow2[iter4].daily_date);
         if (this.newData.selectedDate === this.meow2[iter4].daily_date) {
           // console.log("Hey there", this.newData.selectedDate);
-          await axios.delete(`http://localhost:3000/Kitchen_menu/delete`, {
+          await axios.delete(this.baseURl + 'Kitchen_menu/delete', {
             data: { id: this.newData.selectedDate }
           });
         }
@@ -725,24 +728,24 @@ export default {
 
       console.log("Before");
       axios
-        .post("http://localhost:3000/date", {
+        .post(this.baseURl + 'date', {
           todo: this.fetchDate,
           todo1: this.newData.userHotel
         })
         .then(response => {
           console.log("response", response);
           axios
-            .get("http://localhost:3000/Kitchen_menu/databreakfast")
+            .get(this.baseURl + 'Kitchen_menu/databreakfast')
             .then(res0 => {
               self.breakdata = res0.data;
               console.log("this.breakdata", self.breakdata);
               axios
-                .get("http://localhost:3000/Kitchen_menu/datalunch")
+                .get(this.baseURl + 'Kitchen_menu/datalunch')
                 .then(res1 => {
                   self.lunchdata = res1.data;
                   console.log("this.lunchdata", self.lunchdata);
                   axios
-                    .get("http://localhost:3000/Kitchen_menu/datadinner")
+                    .get(this.baseURl + 'Kitchen_menu/datadinner')
                     .then(res2 => {
                       self.dinnerdata = res2.data;
                       console.log("this.dinnerdata", self.dinnerdata);
@@ -852,7 +855,7 @@ export default {
       this.todaydate = moment().format("YYYY-MM-DD");
       console.log(this.todaydate);
       const kitchenData = await axios.get(
-        "http://localhost:3000/Zolo_city/userdata"
+        this.baseURl + 'Zolo_city/userdata',
       );
       // var kitchencity = [];
       this.kitchenNew = kitchenData;
@@ -862,7 +865,7 @@ export default {
       }
 
       const CityData = await axios.get(
-        "http://localhost:3000/Zolo_city/userdatacity"
+        this.baseURl + 'Zolo_city/userdatacity',
       );
 
       // this.cityNew = CityData.data;
@@ -875,9 +878,9 @@ export default {
     },
 
     async getAllData() {
-      const tableData = await axios.get(`http://localhost:3000/Kitchen_menu`);
+      const tableData = await axios.get(this.baseURl + 'Kitchen_menu');
       const tableData3 = await axios.get(
-        "http://localhost:3000/Kitchen_menu/getdistinct"
+        this.baseURl + 'Kitchen_menu/getdistinct'
       );
       this.meow2 = tableData3.data;
       // console.log("Distinct Dates", this.meow2);

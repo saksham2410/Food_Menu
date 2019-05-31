@@ -1,4 +1,5 @@
 import Vue from 'vue'
+require('dotenv').config();
 import './plugins/vuetify'
 import App from './App.vue'
 
