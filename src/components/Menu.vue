@@ -503,7 +503,7 @@ var moment = require("moment");
 export default {
   data() {
     return {
-      baseURl: process.env.VUE_APP_BASE_URL,
+      baseURl: 'http://3.218.108.144:4300/',
       // dropdown_font: [],
       kitchenNew: [],
       todaydate: "",

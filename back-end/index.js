@@ -18,21 +18,21 @@ app.use(bodyParser.json());
 // });
 // const mysqlServer = `mysql://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@${process.env.DB_SERVER}`;
 
-// const db = mysql.createConnection({
-//   host: "localhost",
-//   database: "data1",
-//   user: "root",
-//   password: "password"
-// });
-
-
-console.log(process.env.MYSQL_URL);
 const db = mysql.createConnection({
-  host     : process.env.MYSQL_URL,
-  user     : process.env.MYSQL_USERNAME,
-  password : process.env.MYSQL_PASSWORD,
-  database : process.env.MYSQL_DATABASE
+  host: "3.218.108.144",
+  database: "test1",
+  user: "project_admin",
+  password: "Zolo@123"
 });
+
+
+// console.log(process.env.MYSQL_URL);
+// const db = mysql.createConnection({
+//   host     : process.env.MYSQL_URL,
+//   user     : process.env.MYSQL_USERNAME,
+//   password : process.env.MYSQL_PASSWORD,
+//   database : process.env.MYSQL_DATABASE
+// });
 
 const query = sqlStatement =>
   new Promise((resolve, reject) => {
@@ -255,7 +255,7 @@ createTableBasicAPI("Zolo_city");
 
 app.use(staticFileMiddleware);
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 4300;
 app.listen(PORT);
 
 
