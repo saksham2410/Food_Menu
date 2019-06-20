@@ -207,7 +207,7 @@ export default {
       menu2: false,
       menu3: false,
       date: new Date().toISOString().substr(0, 10),
-      baseURl: "http://localhost:4300/",
+      baseURl: "http://3.218.108.144:4300/",
       kitchenNew: [],
       todaydate: "",
       kitchenName: ['Please select a City First'],

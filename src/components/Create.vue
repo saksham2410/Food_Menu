@@ -118,7 +118,7 @@ export default {
       fetchDate: "",
       userKitchen: "",
       date: new Date().toISOString().substr(0, 10),
-      baseURl: "http://localhost:4300/"
+      baseURl: "http://3.218.108.144:4300/"
     };
   },
   methods: {
