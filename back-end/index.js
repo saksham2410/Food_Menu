@@ -1,6 +1,6 @@
 const express = require("express");
-require('dotenv').config();
-var history = require('connect-history-api-fallback');
+require("dotenv").config();
+var history = require("connect-history-api-fallback");
 const mysql = require("mysql");
 const cors = require("cors");
 var bodyParser = require("body-parser");
@@ -19,16 +19,30 @@ app.use(bodyParser.json());
 // const mysqlServer = `mysql://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@${process.env.DB_SERVER}`;
 
 const db = mysql.createConnection({
-  host     : '34.205.83.88',
-  user     : 'analytics_proto',
-  password : 'analytics_123',
-  database : 'Analytics_Prototype'
+  host: "34.205.83.88",
+  user: "analytics_proto",
+  password: "analytics_123",
+  database: "Analytics_Prototype"
 });
 
+const db1 = mysql.createConnection({
+  host: "34.205.83.88",
+  user: "analytics_proto",
+  password: "analytics_123",
+  database: "Zolo_Centers"
+});
 
 const query = sqlStatement =>
   new Promise((resolve, reject) => {
     db.query(sqlStatement, (err, results) => {
+      if (err) return reject(err);
+      resolve(results);
+    });
+  });
+
+const query1 = sqlStatement =>
+  new Promise((resolve, reject) => {
+    db1.query(sqlStatement, (err, results) => {
       if (err) return reject(err);
       resolve(results);
     });
@@ -41,21 +55,21 @@ app.use(
 );
 
 // Middleware for serving '/dist' directory
-const staticFileMiddleware = express.static('dist');
+const staticFileMiddleware = express.static("dist");
 
 // 1st call for unredirected requests
 app.use(staticFileMiddleware);
 
 // Support history api
-app.use(history({
-  index: '/dist/index.html'
-}));
-
+app.use(
+  history({
+    index: "/dist/index.html"
+  })
+);
 
 app.get("/", (req, res) => {
   res.send("Hello World");
 });
-
 
 const getDate = tableName => async (req, res) => {
   var meow = req.body.todo;
@@ -65,23 +79,40 @@ const getDate = tableName => async (req, res) => {
   const tableData1 = await query(
     `select * from ${tableName} where daily_date='${meow}' and userhotel='${meoww}'`
   );
-  console.log('suthar', tableData1);
+  console.log("suthar", tableData1);
   res.json(tableData1);
 };
 
+// const getUserData = tableName => async (req, res) => {
+//   const userData = await query(
+//     `select DISTINCT CITY, LOCALNAME from ${tableName} where TYPE = "Kitchen"`
+//   );
+//   console.log(userData);
+//   res.json(userData);
+// };
 
 const getUserData = tableName => async (req, res) => {
-  const userData = await query(
-    `select DISTINCT CITY, LOCALNAME from ${tableName} where TYPE = "Kitchen"`
+  const userData = await query1(
+    `select DISTINCT CITY, LOCALNAME from ${tableName} where TYPE = "Property" AND Approved = 1`
   );
-  console.log(userData);
+  console.log(userData)
   res.json(userData);
 };
 
-// console.log('Try',meow);
+const getKitchen = tableName => async (req, res) => {
+  assKitchen = req.body.propName;
+  console.log("assKitchen", assKitchen);
+  const kitName = await query(
+    `select Associated_Kitchen_Name from ${tableName} where Property_Name='${assKitchen}'`
+  );
+  res.json(kitName);
+};
+
 
 const getDistinctDates = tableName => async (req, res) => {
-  const tableData3 = await query(`select DISTINCT daily_date from ${tableName}`);
+  const tableData3 = await query(
+    `select DISTINCT daily_date from ${tableName}`
+  );
   res.json(tableData3);
 };
 
@@ -119,8 +150,8 @@ const insertTableRow = tableName => async (req, res) => {
  * @param {string} tableName
  */
 
-
 const createTableBasicAPI = tableName => {
+  app.post(`/${tableName}/getkit`, getKitchen(`${tableName}`));
   app.post(`/${tableName}/date`, getDate(`${tableName}`));
   app.get(`/${tableName}/userdata`, getUserData(`${tableName}`));
   app.get(`/${tableName}/getdistinct`, getDistinctDates(`${tableName}`));
@@ -129,8 +160,8 @@ const createTableBasicAPI = tableName => {
 };
 
 createTableBasicAPI("Kitchen_menu");
-createTableBasicAPI("Zolo_city");
-
+createTableBasicAPI("Centers");
+createTableBasicAPI("Property_Kitchen_Map");
 
 app.use(staticFileMiddleware);
 

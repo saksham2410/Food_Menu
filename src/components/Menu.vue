@@ -8,6 +8,7 @@
               <v-form>
                 <v-container grid-list-md>
                   <v-layout row wrap>
+                    
                     <v-flex sm12 md4>
                       <v-text-field label="Filled By: " v-model="newData[0].userName" outline></v-text-field>
                     </v-flex>
@@ -16,6 +17,7 @@
                         v-model="newData[0].userCity"
                         :items="cityNew"
                         reuired
+                        @input="kitchenSelect"
                         label="User City"
                         outline
                       ></v-select>
@@ -25,9 +27,13 @@
                         v-model="newData[0].userHotel"
                         :items="kitchenName"
                         required
+                        @input="assKitchenSel"
                         label="User Kitchen"
                         outline
                       ></v-select>
+                    </v-flex>
+                    <v-flex sm12 md4>
+                      Your Kitchen Name is : {{assKitchenName}}
                     </v-flex>
                   </v-layout>
                 </v-container>
@@ -168,26 +174,6 @@
             {{successtext}}
             <v-btn @click="updateState" v-if="this.successtext==='Added'">OK</v-btn>
             <br>
-            <br>Get Data for :
-            <v-layout row wrap>
-              <v-flex sm12 md4>
-                <v-menu v-model="menu3" :close-on-content-click="false" full-width max-width="290">
-                  <template v-slot:activator="{ on }">
-                    <v-text-field
-                      :value="computedDateFormattedMomentjs"
-                      clearable
-                      label="Select a date"
-                      readonly
-                      v-on="on"
-                    ></v-text-field>
-                  </template>
-                  <v-date-picker v-model="date" @change="fun3"></v-date-picker>
-                </v-menu>
-              </v-flex>
-              <v-flex sm12 md4>
-                <v-btn v-on:click="visible = true" @click="showResp()">Show Response</v-btn>
-              </v-flex>
-            </v-layout>
             <br>
             <br>
             <br>
@@ -214,16 +200,17 @@
 import axios from "axios";
 var moment = require("moment");
 export default {
+  name: "Menu",
   data() {
     return {
       menu1: false,
       menu2: false,
       menu3: false,
       date: new Date().toISOString().substr(0, 10),
-      baseURl: "http://3.218.108.144:4300/",
+      baseURl: "http://localhost:4300/",
       kitchenNew: [],
       todaydate: "",
-      kitchenName: [],
+      kitchenName: ['Please select a City First'],
       cityNew: [],
       day: "",
       successtext: "",
@@ -245,6 +232,8 @@ export default {
         userHotel: "",
         selectedDate: ""
       },
+      kitchenData: [],
+      assKitchenName: '',
       newData: [
         {
           meal_type: {
@@ -265,6 +254,23 @@ export default {
   },
 
   methods: {
+    kitchenSelect() {
+      this.kitchenName = [];
+      this.kitchenData.data.forEach((element, index) => {
+        if (this.newData[0].userCity === element.CITY) this.kitchenName.push(element.LOCALNAME);
+      });
+      console.log(this.kitchenName.length);
+    },
+    assKitchenSel() {
+      axios
+        .post(this.baseURl + "Property_Kitchen_Map/getkit", {
+          propName: this.newData[0].userHotel
+        })
+        .then(response => {
+          this.assKitchenName = response.data[0].Associated_Kitchen_Name
+          console.log('assKit',response);
+        });
+    },
     fun1() {
       this.menu1 = false;
       this.newData[0].selectedDate = this.date;
@@ -294,7 +300,7 @@ export default {
       newData1.item_name = element1;
       newData1.userCity = this.newData[0].userCity;
       newData1.userName = this.newData[0].userName;
-      newData1.userHotel = this.newData[0].userHotel;
+      newData1.userHotel = this.assKitchenName;
       newData1.selectedDate = this.newData[0].selectedDate;
       return newData1;
     },
@@ -362,35 +368,12 @@ export default {
           .format("dddd" + " " + "DD/MM/YYYY");
       }
     },
-    showResp() {
-      const self = this;
-      var time1 = this.newData[0].selectedDate;
-      this.fetchDate = moment(time1, "YYYY-MM-DD").format(
-        "dddd" + " " + "DD/MM/YYYY"
-      );
-      console.log(this.fetchDate);
-      axios
-        .post(this.baseURl + "Kitchen_menu/date", {
-          todo: this.fetchDate,
-          todo1: this.newData[0].userHotel
-        })
-        .then(response => {
-          console.log("response", response);
-          this.newData[0].selectedDate = this.fetchDate;
-          response.data.forEach((element, index) => {
-            if (element.meal_type === "breakfast") {
-              self.newData[0].meal_type.breakfast.items.push(element.item_name);
-            }
-            if (element.meal_type === "lunch") {
-              self.newData[0].meal_type.lunch.items.push(element.item_name);
-            }
-            if (element.meal_type === "dinner") {
-              self.newData[0].meal_type.dinner.items.push(element.item_name);
-            }
-          });
-        });
-    },
     async getKitchenData() {
+      this.kitchenData = await axios.get(this.baseURl + "Centers/userdata");
+      console.log("hi", this.kitchenData);
+      this.kitchenData.data.forEach((element, index) => {
+        this.cityNew.push(element.CITY);
+      });
       this.todaydate = moment().format("YYYY-MM-DD");
       for (var index = 0; index < 6; index++) {
         this.newData.push({
@@ -406,14 +389,14 @@ export default {
         });
       }
       console.log("length of newData", this.newData.length);
-      axios.get(this.baseURl + "Zolo_city/userdata").then(response => {
-        var items = [];
-        response.data.forEach(element => {
-          items.push(element.CITY);
-          this.kitchenName.push(element.LOCALNAME);
-        });
-        this.cityNew = Array.from(new Set(items));
-      });
+      // axios.get(this.baseURl + "Zolo_city/userdata").then(response => {
+      //   var items = [];
+      //   response.data.forEach(element => {
+      //     items.push(element.CITY);
+      //     this.kitchenName.push(element.LOCALNAME);
+      //   });
+      //   this.cityNew = Array.from(new Set(items));
+      // });
       this.newData[0].selectedDate = this.date;
     }
   },
