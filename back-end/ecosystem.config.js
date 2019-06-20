@@ -6,7 +6,7 @@ module.exports = {
   apps: [
     {
       name: "FOOD",
-      script: "index.js",
+      script: "./back-end/index.js",
       cwd: process.cwd(),
       env: {
         COMMON_VARIABLE: "true"
