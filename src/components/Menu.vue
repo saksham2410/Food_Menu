@@ -1,116 +1,78 @@
 <template>
   <v-app id="inspire">
-    <!-- <v-navigation-drawer v-model="drawer" clipped fixed app>
-      <v-list dense>
-        <v-list-tile @click="console.log('Clicked')">
-          <v-list-tile-action>
-            <v-icon>dashboard</v-icon>
-          </v-list-tile-action>
-          <v-list-tile-content>
-            <v-list-tile-title>Dashboard</v-list-tile-title>
-          </v-list-tile-content>
-        </v-list-tile>
-        <v-list-tile @click="console.log('Clicked')">
-          <v-list-tile-action>
-            <v-icon>settings</v-icon>
-          </v-list-tile-action>
-          <v-list-tile-content>
-            <v-list-tile-title>Settings</v-list-tile-title>
-          </v-list-tile-content>
-        </v-list-tile>
-      </v-list>
-    </v-navigation-drawer> -->
-    <!-- <v-toolbar app fixed clipped-left>
-      <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
-      <v-toolbar-title>ZoloStays Menu Update Form</v-toolbar-title>
-    </v-toolbar> -->
     <v-content>
       <v-container column wrap align-center>
-        
         <v-layout justify-center align-center>
-          
           <v-flex shrink>
-            <!-- <span>Current Date is :
-              {{formattedDate}}</span> -->
             <v-card-text>
-            <v-form>
-               <v-container grid-list-md>
-            <v-layout row wrap>
-              
-              <!-- {{this.day}} -->
-              <v-flex sm12 md4>
-                  <v-text-field
-                    label="Filled By: "
-                    v-model="newData.userName"
-                    outline
-                  >
-                  </v-text-field>
-</v-flex>
-                <v-flex sm12 md4>
-                  <v-select
-                  v-model="newData.userCity"
-                  :items="cityNew"
-                  reuired
-                  label="User City"
-                  outline
-                ></v-select>
-                </v-flex>
-                 <v-flex sm12 md4>
-                  <v-select
-                  v-model="newData.userHotel"
-                  :items="kitchenName"
-                  required
-                  label="User Kitchen"
-                  outline
-                ></v-select>
-                </v-flex>
-                <!-- <th>
-                  <select @click="getKitchenData" v-model="newData.userCity">
-                    <option value selected>Select Your City</option>
-                    <option v-for="index in kitchenNewlength" :key="index">{{kitchenNew[index].CITY}}</option>
-                  </select>
-                </th>-->
-                <!-- <th> -->
-                <!-- <select v-model="newData.userHotel">
-                    <option value selected>Select Your Kitchen</option>
-                    <option value="Zolo1">Zolo1</option>
-                    <option value="Zolo2">Zolo2</option>
-                    <option value="Zolo3">Zolo3</option>
-                    <option value="Zolo4">Zolo4</option>
-                </select>-->
-                <!-- <input
-                type="text"
-                value="userhotel"
-                placeholder="User Hotel"
-                v-model="newData.userHotel"
-                >-->
-                <!-- </th> -->
-            </v-layout></v-container>
-            </v-form>
+              <v-form>
+                <v-container grid-list-md>
+                  <v-layout row wrap>
+                    <v-flex sm12 md4>
+                      <v-text-field label="Filled By: " v-model="newData[0].userName" outline></v-text-field>
+                    </v-flex>
+                    <v-flex sm12 md4>
+                      <v-select
+                        v-model="newData[0].userCity"
+                        :items="cityNew"
+                        reuired
+                        label="User City"
+                        outline
+                      ></v-select>
+                    </v-flex>
+                    <v-flex sm12 md4>
+                      <v-select
+                        v-model="newData[0].userHotel"
+                        :items="kitchenName"
+                        required
+                        label="User Kitchen"
+                        outline
+                      ></v-select>
+                    </v-flex>
+                  </v-layout>
+                </v-container>
+              </v-form>
             </v-card-text>
-            Add for this week :
-            <input
-              type="date"
-              :min="todaydate"
-              class="inputdate"
-              v-model="newData.selectedDate"
-            >
-            <v-btn v-on:click="visible = !visible" @click="setNewDate">Add for this Week</v-btn>
-            <!-- <v-btn @click="getKitchenData">Get Kitchen Data</v-btn> -->
-            <br>
-            <br>Add for a day :
-            <input
-              type="date"
-              :min="todaydate"
-              class="inputdate"
-              v-model="newData.selectedDate"
-            >
-            <v-btn v-on:click="visible = true">Add Day</v-btn>
+            <v-layout row wrap>
+              <v-flex sm12 md4>
+                Add for this week :
+                <v-menu v-model="menu1" :close-on-content-click="false" full-width max-width="290">
+                  <template v-slot:activator="{ on }">
+                    <v-text-field
+                      :value="computedDateFormattedMomentjs"
+                      clearable
+                      label="Select a date"
+                      readonly
+                      v-on="on"
+                    ></v-text-field>
+                  </template>
+                  <v-date-picker v-model="date" @change="fun1"></v-date-picker>
+                </v-menu>
+                <v-btn v-on:click="visible = !visible" @click="setNewDate()">Add for this Week</v-btn>
+              </v-flex>
+              <v-flex sm6 md2></v-flex>
+              <v-flex sm12 md4>
+                Add for a day :
+                <v-menu v-model="menu2" :close-on-content-click="false" full-width max-width="290">
+                  <template v-slot:activator="{ on }">
+                    <v-text-field
+                      :value="computedDateFormattedMomentjs"
+                      clearable
+                      label="Select a date"
+                      readonly
+                      v-on="on"
+                    ></v-text-field>
+                  </template>
+                  <v-date-picker v-model="date" @change="fun2"></v-date-picker>
+                </v-menu>
+                <v-btn v-on:click="visible = true">Add Day</v-btn>
+              </v-flex>
+            </v-layout>
+
             <br>
             <table v-if="visible" class="elevation-4">
-              <!-- <template v-slot:items="props"> -->
               <tr justify-center>
-                <th>Date : {{this.newData.selectedDate}}</th>
+                <th>Date : {{newData[0].selectedDate}}</th>
                 <th>Item 1</th>
                 <th>Item 2</th>
                 <th>Item 3</th>
@@ -127,7 +89,7 @@
                   <input type="text" v-model="meal_type[0]" readonly>
                 </th>
                 <td v-for="index in 10" :key="index">
-                  <input class="input" v-model="newData.meal_type.breakfast.items[index-1]">
+                  <input class="input" v-model="newData[0].meal_type.breakfast.items[index-1]">
                 </td>
               </tr>
 
@@ -136,7 +98,7 @@
                   <input type="text" v-model="meal_type[1]" readonly>
                 </th>
                 <td v-for="index in 10" :key="index">
-                  <input class="input" v-model="newData.meal_type.lunch.items[index-1]">
+                  <input class="input" v-model="newData[0].meal_type.lunch.items[index-1]">
                 </td>
               </tr>
 
@@ -145,16 +107,16 @@
                   <input type="text" v-model="meal_type[2]" readonly>
                 </th>
                 <td v-for="index in 10" :key="index">
-                  <input class="input" v-model="newData.meal_type.dinner.items[index-1]">
+                  <input class="input" v-model="newData[0].meal_type.dinner.items[index-1]">
                 </td>
               </tr>
               <!-- </template> -->
             </table>
             <v-flex v-if="!visible">
-              <table>
+              <table v-for="day in 7" :key="day">
                 <br>
                 <tr>
-                  <th>{{this.newData0.selectedDate}}</th>
+                  <th>Date: {{newData[day-1].selectedDate}}</th>
                   <th>Item 1</th>
                   <th>Item 2</th>
                   <th>Item 3</th>
@@ -172,7 +134,10 @@
                     <input type="text" v-model="meal_type[0]" readonly>
                   </th>
                   <td v-for="index in 10" :key="index">
-                    <input class="input" v-model="newData0.meal_type.breakfast.items[index-1]">
+                    <input
+                      class="input"
+                      v-model="newData[day-1].meal_type.breakfast.items[index-1]"
+                    >
                   </td>
                 </tr>
 
@@ -181,7 +146,7 @@
                     <input type="text" v-model="meal_type[1]" readonly>
                   </th>
                   <td v-for="index in 10" :key="index">
-                    <input class="input" v-model="newData0.meal_type.lunch.items[index-1]">
+                    <input class="input" v-model="newData[day-1].meal_type.lunch.items[index-1]">
                   </td>
                 </tr>
 
@@ -190,280 +155,11 @@
                     <input type="text" v-model="meal_type[2]" readonly>
                   </th>
                   <td v-for="index in 10" :key="index">
-                    <input class="input" v-model="newData0.meal_type.dinner.items[index-1]">
+                    <input class="input" v-model="newData[day-1].meal_type.dinner.items[index-1]">
                   </td>
                 </tr>
               </table>
               <br>
-              <br>
-              <table>
-                <br>
-                <tr>
-                  <th>{{this.newData2.selectedDate}}</th>
-                  <th>Item 1</th>
-                  <th>Item 2</th>
-                  <th>Item 3</th>
-                  <th>Item 4</th>
-                  <th>Item 5</th>
-                  <th>Item 6</th>
-                  <th>Item 7</th>
-                  <th>Item 8</th>
-                  <th>Item 9</th>
-                  <th>Item 10</th>
-                </tr>
-
-                <tr>
-                  <th>
-                    <input type="text" v-model="meal_type[0]" readonly>
-                  </th>
-                  <td v-for="index in 10" :key="index">
-                    <input class="input" v-model="newData2.meal_type.breakfast.items[index-1]">
-                  </td>
-                </tr>
-
-                <tr>
-                  <th>
-                    <input type="text" v-model="meal_type[1]" readonly>
-                  </th>
-                  <td v-for="index in 10" :key="index">
-                    <input class="input" v-model="newData2.meal_type.lunch.items[index-1]">
-                  </td>
-                </tr>
-
-                <tr>
-                  <th>
-                    <input type="text" v-model="meal_type[2]" readonly>
-                  </th>
-                  <td v-for="index in 10" :key="index">
-                    <input class="input" v-model="newData2.meal_type.dinner.items[index-1]">
-                  </td>
-                </tr>
-              </table>
-              <br>
-              <br>
-              <table>
-                <br>
-                <tr>
-                  <th>{{this.newData3.selectedDate}}</th>
-                  <th>Item 1</th>
-                  <th>Item 2</th>
-                  <th>Item 3</th>
-                  <th>Item 4</th>
-                  <th>Item 5</th>
-                  <th>Item 6</th>
-                  <th>Item 7</th>
-                  <th>Item 8</th>
-                  <th>Item 9</th>
-                  <th>Item 10</th>
-                </tr>
-
-                <tr>
-                  <th>
-                    <input type="text" v-model="meal_type[0]" readonly>
-                  </th>
-                  <td v-for="index in 10" :key="index">
-                    <input class="input" v-model="newData3.meal_type.breakfast.items[index-1]">
-                  </td>
-                </tr>
-
-                <tr>
-                  <th>
-                    <input type="text" v-model="meal_type[1]" readonly>
-                  </th>
-                  <td v-for="index in 10" :key="index">
-                    <input class="input" v-model="newData3.meal_type.lunch.items[index-1]">
-                  </td>
-                </tr>
-
-                <tr>
-                  <th>
-                    <input type="text" v-model="meal_type[2]" readonly>
-                  </th>
-                  <td v-for="index in 10" :key="index">
-                    <input class="input" v-model="newData3.meal_type.dinner.items[index-1]">
-                  </td>
-                </tr>
-              </table>
-              <br>
-              <br>
-              <table>
-                <br>
-                <tr>
-                  <th>{{this.newData4.selectedDate}}</th>
-                  <th>Item 1</th>
-                  <th>Item 2</th>
-                  <th>Item 3</th>
-                  <th>Item 4</th>
-                  <th>Item 5</th>
-                  <th>Item 6</th>
-                  <th>Item 7</th>
-                  <th>Item 8</th>
-                  <th>Item 9</th>
-                  <th>Item 10</th>
-                </tr>
-
-                <tr>
-                  <th>
-                    <input type="text" v-model="meal_type[0]" readonly>
-                  </th>
-                  <td v-for="index in 10" :key="index">
-                    <input class="input" v-model="newData4.meal_type.breakfast.items[index-1]">
-                  </td>
-                </tr>
-
-                <tr>
-                  <th>
-                    <input type="text" v-model="meal_type[1]" readonly>
-                  </th>
-                  <td v-for="index in 10" :key="index">
-                    <input class="input" v-model="newData4.meal_type.lunch.items[index-1]">
-                  </td>
-                </tr>
-
-                <tr>
-                  <th>
-                    <input type="text" v-model="meal_type[2]" readonly>
-                  </th>
-                  <td v-for="index in 10" :key="index">
-                    <input class="input" v-model="newData4.meal_type.dinner.items[index-1]">
-                  </td>
-                </tr>
-              </table>
-              <br>
-              <br>
-              <table>
-                <br>
-                <tr>
-                  <th>{{this.newData5.selectedDate}}</th>
-                  <th>Item 1</th>
-                  <th>Item 2</th>
-                  <th>Item 3</th>
-                  <th>Item 4</th>
-                  <th>Item 5</th>
-                  <th>Item 6</th>
-                  <th>Item 7</th>
-                  <th>Item 8</th>
-                  <th>Item 9</th>
-                  <th>Item 10</th>
-                </tr>
-
-                <tr>
-                  <th>
-                    <input type="text" v-model="meal_type[0]" readonly>
-                  </th>
-                  <td v-for="index in 10" :key="index">
-                    <input class="input" v-model="newData5.meal_type.breakfast.items[index-1]">
-                  </td>
-                </tr>
-
-                <tr>
-                  <th>
-                    <input type="text" v-model="meal_type[1]" readonly>
-                  </th>
-                  <td v-for="index in 10" :key="index">
-                    <input class="input" v-model="newData5.meal_type.lunch.items[index-1]">
-                  </td>
-                </tr>
-
-                <tr>
-                  <th>
-                    <input type="text" v-model="meal_type[2]" readonly>
-                  </th>
-                  <td v-for="index in 10" :key="index">
-                    <input class="input" v-model="newData5.meal_type.dinner.items[index-1]">
-                  </td>
-                </tr>
-              </table>
-              <br>
-              <br>
-              <table>
-                <br>
-                <tr>
-                  <th>{{this.newData6.selectedDate}}</th>
-                  <th>Item 1</th>
-                  <th>Item 2</th>
-                  <th>Item 3</th>
-                  <th>Item 4</th>
-                  <th>Item 5</th>
-                  <th>Item 6</th>
-                  <th>Item 7</th>
-                  <th>Item 8</th>
-                  <th>Item 9</th>
-                  <th>Item 10</th>
-                </tr>
-
-                <tr>
-                  <th>
-                    <input type="text" v-model="meal_type[0]" readonly>
-                  </th>
-                  <td v-for="index in 10" :key="index">
-                    <input class="input" v-model="newData6.meal_type.breakfast.items[index-1]">
-                  </td>
-                </tr>
-
-                <tr>
-                  <th>
-                    <input type="text" v-model="meal_type[1]" readonly>
-                  </th>
-                  <td v-for="index in 10" :key="index">
-                    <input class="input" v-model="newData6.meal_type.lunch.items[index-1]">
-                  </td>
-                </tr>
-
-                <tr>
-                  <th>
-                    <input type="text" v-model="meal_type[2]" readonly>
-                  </th>
-                  <td v-for="index in 10" :key="index">
-                    <input class="input" v-model="newData6.meal_type.dinner.items[index-1]">
-                  </td>
-                </tr>
-              </table>
-              <br>
-              <br>
-              <table>
-                <br>
-                <tr>
-                  <th>{{this.newData7.selectedDate}}</th>
-                  <th>Item 1</th>
-                  <th>Item 2</th>
-                  <th>Item 3</th>
-                  <th>Item 4</th>
-                  <th>Item 5</th>
-                  <th>Item 6</th>
-                  <th>Item 7</th>
-                  <th>Item 8</th>
-                  <th>Item 9</th>
-                  <th>Item 10</th>
-                </tr>
-
-                <tr>
-                  <th>
-                    <input type="text" v-model="meal_type[0]" readonly>
-                  </th>
-                  <td v-for="index in 10" :key="index">
-                    <input class="input" v-model="newData7.meal_type.breakfast.items[index-1]">
-                  </td>
-                </tr>
-
-                <tr>
-                  <th>
-                    <input type="text" v-model="meal_type[1]" readonly>
-                  </th>
-                  <td v-for="index in 10" :key="index">
-                    <input class="input" v-model="newData7.meal_type.lunch.items[index-1]">
-                  </td>
-                </tr>
-
-                <tr>
-                  <th>
-                    <input type="text" v-model="meal_type[2]" readonly>
-                  </th>
-                  <td v-for="index in 10" :key="index">
-                    <input class="input" v-model="newData7.meal_type.dinner.items[index-1]">
-                  </td>
-                </tr>
-              </table>
               <br>
               <br>
             </v-flex>
@@ -473,8 +169,25 @@
             <v-btn @click="updateState" v-if="this.successtext==='Added'">OK</v-btn>
             <br>
             <br>Get Data for :
-            <input type="date" class="inputdate" v-model="fetchDate">
-            <v-btn v-on:click="visible = true" @click="setNewDate();setDate();">Show Data</v-btn>
+            <v-layout row wrap>
+              <v-flex sm12 md4>
+                <v-menu v-model="menu3" :close-on-content-click="false" full-width max-width="290">
+                  <template v-slot:activator="{ on }">
+                    <v-text-field
+                      :value="computedDateFormattedMomentjs"
+                      clearable
+                      label="Select a date"
+                      readonly
+                      v-on="on"
+                    ></v-text-field>
+                  </template>
+                  <v-date-picker v-model="date" @change="fun3"></v-date-picker>
+                </v-menu>
+              </v-flex>
+              <v-flex sm12 md4>
+                <v-btn v-on:click="visible = true" @click="showResp()">Show Response</v-btn>
+              </v-flex>
+            </v-layout>
             <br>
             <br>
             <br>
@@ -503,8 +216,11 @@ var moment = require("moment");
 export default {
   data() {
     return {
-      baseURl: 'http://3.218.108.144:4300/',
-      // dropdown_font: [],
+      menu1: false,
+      menu2: false,
+      menu3: false,
+      date: new Date().toISOString().substr(0, 10),
+      baseURl: "http://localhost:4300/",
       kitchenNew: [],
       todaydate: "",
       kitchenName: [],
@@ -529,103 +245,19 @@ export default {
         userHotel: "",
         selectedDate: ""
       },
-      newData0: {
-        meal_type: {
-          breakfast: { type: "breakfast", items: [] },
-          lunch: { type: "lunch", items: [] },
-          dinner: { type: "dinner", items: [] }
-        },
-        userCity: "",
-        userName: "",
-        userHotel: "",
-        selectedDate: ""
-      },
-      newData2: {
-        meal_type: {
-          breakfast: { type: "breakfast", items: [] },
-          lunch: { type: "lunch", items: [] },
-          dinner: { type: "dinner", items: [] }
-        },
-        userCity: "",
-        userName: "",
-        userHotel: "",
-        selectedDate: ""
-      },
-      newData3: {
-        meal_type: {
-          breakfast: { type: "breakfast", items: [] },
-          lunch: { type: "lunch", items: [] },
-          dinner: { type: "dinner", items: [] }
-        },
-        userCity: "",
-        userName: "",
-        userHotel: "",
-        selectedDate: ""
-      },
-      newData4: {
-        meal_type: {
-          breakfast: { type: "breakfast", items: [] },
-          lunch: { type: "lunch", items: [] },
-          dinner: { type: "dinner", items: [] }
-        },
-        userCity: "",
-        userName: "",
-        userHotel: "",
-        selectedDate: ""
-      },
-      newData5: {
-        meal_type: {
-          breakfast: { type: "breakfast", items: [] },
-          lunch: { type: "lunch", items: [] },
-          dinner: { type: "dinner", items: [] }
-        },
-        userCity: "",
-        userName: "",
-        userHotel: "",
-        selectedDate: ""
-      },
-      newData6: {
-        meal_type: {
-          breakfast: { type: "breakfast", items: [] },
-          lunch: { type: "lunch", items: [] },
-          dinner: { type: "dinner", items: [] }
-        },
-        userCity: "",
-        userName: "",
-        userHotel: "",
-        selectedDate: ""
-      },
-      newData7: {
-        meal_type: {
-          breakfast: { type: "breakfast", items: [] },
-          lunch: { type: "lunch", items: [] },
-          dinner: { type: "dinner", items: [] }
-        },
-        userCity: "",
-        userName: "",
-        userHotel: "",
-        selectedDate: ""
-      },
-      drawer: null,
-      newData: {
-        meal_type: {
-          breakfast: { type: "breakfast", items: [] },
-          lunch: { type: "lunch", items: [] },
-          dinner: { type: "dinner", items: [] }
-        },
-        userCity: "",
-        userName: "",
-        userHotel: "",
-        selectedDate: ""
-      },
-      newData1: {
-        meal_type: "",
-        item_name: "",
-        userCity: "",
-        userName: "",
-        userHotel: "",
-        selectedDate: ""
-      }
+      newData: [
+        {
+          meal_type: {
+            breakfast: { type: "breakfast", items: [] },
+            lunch: { type: "lunch", items: [] },
+            dinner: { type: "dinner", items: [] }
+          },
+          userCity: "",
+          userName: "",
+          userHotel: "",
+          selectedDate: new Date().toISOString().substr(0, 10)
+        }
+      ]
     };
   },
   props: {
@@ -633,271 +265,170 @@ export default {
   },
 
   methods: {
-    async modifyData(DataType) {
-      // console.log("Datatyle", DataType);
-      let index = 0;
-      for (index; index < DataType.meal_type.breakfast.items.length; index++) {
-        this.newData1.meal_type = DataType.meal_type.breakfast.type;
-        this.newData1.item_name = DataType.meal_type.breakfast.items[index];
-        this.newData1.userCity = this.newData.userCity;
-        this.newData1.userName = this.newData.userName;
-        this.newData1.userHotel = this.newData.userHotel;
-        this.newData1.selectedDate = DataType.selectedDate;
-        await axios.post(
-          this.baseURl + 'Kitchen_menu/insert',
-          // `http://localhost:3000/Kitchen_menu/insert`,
-          this.newData1
-        );
-      }
-      index = 0;
-      
-      for (index; index < DataType.meal_type.lunch.items.length; index++) {
-        this.newData1.meal_type = DataType.meal_type.lunch.type;
-        this.newData1.item_name = DataType.meal_type.lunch.items[index];
-        this.newData1.userCity = this.newData.userCity;
-        this.newData1.userName = this.newData.userName;
-        this.newData1.userHotel = this.newData.userHotel;
-        this.newData1.selectedDate = DataType.selectedDate;
-        await axios.post(
-          this.baseURl + 'Kitchen_menu/insert',
-          this.newData1
-        );
-      }
-      index = 0;
-      for (index; index < DataType.meal_type.dinner.items.length; index++) {
-        this.newData1.meal_type = DataType.meal_type.dinner.type;
-        this.newData1.item_name = DataType.meal_type.dinner.items[index];
-        this.newData1.userCity = this.newData.userCity;
-        this.newData1.userName = this.newData.userName;
-        this.newData1.userHotel = this.newData.userHotel;
-        this.newData1.selectedDate = DataType.selectedDate;
-        await axios.post(
-          this.baseURl + 'Kitchen_menu/insert',
-          this.newData1
-        );
-      }
-      // console.log('Final Data Sent',this.newData1)
+    fun1() {
+      this.menu1 = false;
+      this.newData[0].selectedDate = this.date;
+      this.setNewDate();
+    },
+    fun2() {
+      this.menu2 = false;
+      this.newData[0].selectedDate = this.date;
+      this.setNewDate();
+    },
+    fun3() {
+      this.menu3 = false;
+      this.newData[0].selectedDate = this.date;
+      this.fetchDate = this.date;
+      this.setNewDate();
+    },
+    testFun(element1, element2) {
+      var newData1 = {
+        meal_type: "",
+        item_name: "",
+        userCity: "",
+        userName: "",
+        userHotel: "",
+        selectedDate: ""
+      };
+      newData1.meal_type = element2;
+      newData1.item_name = element1;
+      newData1.userCity = this.newData[0].userCity;
+      newData1.userName = this.newData[0].userName;
+      newData1.userHotel = this.newData[0].userHotel;
+      newData1.selectedDate = this.newData[0].selectedDate;
+      return newData1;
     },
     updateState() {
       this.successtext = "";
     },
-    async addNewTableElementBreakfast() {
-      // console.log(this.newData.meal_type.breakfast.items.length);
-      if (this.visible) {
-        this.modifyData(this.newData);
-      }
-      if (!this.visible) {
-        await this.modifyData(this.newData0);
-        // console.log("newData", this.newData1);
-        await this.modifyData(this.newData2);
-        // console.log("newData", this.newData1);
-        await this.modifyData(this.newData3);
-        // console.log("newData", this.newData1);
-        await this.modifyData(this.newData4);
-        // console.log("newData", this.newData1);
-        await this.modifyData(this.newData5);
-        // console.log("newData", this.newData1);
-        await this.modifyData(this.newData6);
-        // console.log("newData", this.newData1);
-        await this.modifyData(this.newData7);
-        // console.log("newData", this.newData1);
-      }
-      // console.log("sent Data", this.newData);
+    addNewTableElementBreakfast() {
+      // if (this.visible) {
+        this.newData.forEach((element, index) => {
+          element.meal_type.breakfast.items.forEach(element1 => {
+            var response = this.testFun(
+              element1,
+              element.meal_type.breakfast.type
+            );
+            console.log(response);
+            axios.post(this.baseURl + "Kitchen_menu/insert", response);
+          });
+          element.meal_type.lunch.items.forEach(element1 => {
+            var response = this.testFun(element1, element.meal_type.lunch.type);
+            console.log(response);
+            axios.post(this.baseURl + "Kitchen_menu/insert", response);
+          });
+          element.meal_type.dinner.items.forEach(element1 => {
+            var response = this.testFun(
+              element1,
+              element.meal_type.dinner.type
+            );
+            console.log(response);
+            axios.post(this.baseURl + "Kitchen_menu/insert", response);
+          });
+        });
       this.successtext = "Added";
-      // this.newData=[];
     },
     async updateData() {
-      // console.log("Reached Here", this.meow2.length);
-      var iter4 = 0;
-      for (iter4; iter4 < this.meow2.length; iter4++) {
-        // console.log(this.meow2.length);
-        // console.log("Hey there", this.newData.selectedDate);
-        // console.log("heyheyehye", this.meow2[iter4].daily_date);
-        if (this.newData.selectedDate === this.meow2[iter4].daily_date) {
-          // console.log("Hey there", this.newData.selectedDate);
-          await axios.delete(this.baseURl + 'Kitchen_menu/delete', {
-            data: { id: this.newData.selectedDate }
-          });
+      this.meow2.forEach((element, index) => {
+        if (this.newData[0].selectedDate === element) {
+          axios
+            .delete(this.baseURl + "Kitchen_menu/delete", {
+              data: { id: this.newData[0].selectedDate }
+            })
+            .then(response => {});
         }
-      }
+      });
       await this.addNewTableElementBreakfast();
     },
-    setDate() {
+    async getAllData() {
       const self = this;
-      // console.log(this.fetchDate);
-
-      console.log("Before");
-      axios
-        .post(this.baseURl + 'date', {
-          todo: this.fetchDate,
-          todo1: this.newData.userHotel
-        })
+      await axios
+        .get(this.baseURl + "Kitchen_menu/getdistinct")
         .then(response => {
-          console.log("response", response);
-          axios
-            .get(this.baseURl + 'Kitchen_menu/databreakfast')
-            .then(res0 => {
-              self.breakdata = res0.data;
-              console.log("this.breakdata", self.breakdata);
-              axios
-                .get(this.baseURl + 'Kitchen_menu/datalunch')
-                .then(res1 => {
-                  self.lunchdata = res1.data;
-                  console.log("this.lunchdata", self.lunchdata);
-                  axios
-                    .get(this.baseURl + 'Kitchen_menu/datadinner')
-                    .then(res2 => {
-                      self.dinnerdata = res2.data;
-                      console.log("this.dinnerdata", self.dinnerdata);
-                      this.newData = {
-                        meal_type: {
-                          breakfast: { type: "breakfast", items: ["NA"] },
-                          lunch: { type: "lunch", items: ["NA"] },
-                          dinner: { type: "dinner", items: ["NA"] }
-                        },
-                        userCity: "",
-                        userName: "",
-                        userHotel: "",
-                        selectedDate: ""
-                      };
-                      this.newData.selectedDate = this.fetchDate;
-                      for (
-                        var index = 0;
-                        index < self.breakdata.length;
-                        index++
-                      ) {
-                        this.newData.meal_type.breakfast.items.push(
-                          this.breakdata[index].item_name
-                        );
-                      }
-                      for (
-                        var index = 0;
-                        index < self.lunchdata.length;
-                        index++
-                      ) {
-                        this.newData.meal_type.lunch.items.push(
-                          self.lunchdata[index].item_name
-                        );
-                      }
-                      for (
-                        var index = 0;
-                        index < self.dinnerdata.length;
-                        index++
-                      ) {
-                        this.newData.meal_type.dinner.items.push(
-                          self.dinnerdata[index].item_name
-                        );
-                      }
-                    });
-                });
-            });
+          response.data.forEach(element => {
+            self.meow2.push(element.daily_date);
+          });
+          console.log(self.meow2);
         });
-    },
-    setNewDate() {
-      var time = this.newData.selectedDate;
-      var time1 = this.fetchDate;
-      console.log("first reached here", time);
-      // var time2 = moment(time, "DD-MM-YYYY").format(
-      //   "dddd" + " " + "DD/MM/YYYY"
-      // );
-      // console.log("reached here", time2);
-      // this.newData.selectedDate = time2;
 
+      await this.updateData();
+    },
+    setDate() {},
+    setNewDate() {
+      var time = this.newData[0].selectedDate;
+      for (var i = 0; i < 7; i++) {
+        this.newData[i].selectedDate = moment(time, "YYYY-MM-DD")
+          .add(i, "day")
+          .format("dddd" + " " + "DD/MM/YYYY");
+      }
+    },
+    showResp() {
+      const self = this;
+      var time1 = this.newData[0].selectedDate;
       this.fetchDate = moment(time1, "YYYY-MM-DD").format(
         "dddd" + " " + "DD/MM/YYYY"
       );
-      console.log("reached again here", this.fetchDate); // I would get this from the database
-      if (this.visible === true) {
-        // console.log("reached here", time);
-        this.newData.selectedDate = moment(time, "YYYY-MM-DD").format(
-          "dddd" + " " + "DD/MM/YYYY"
-        );
-        // console.log("reached again here", this.newData.selectedDate);
-      }
-      if (this.visible === false) {
-        // console.log(time);
-        this.newData0.selectedDate = moment(time, "YYYY-MM-DD").format(
-          "dddd" + " " + "DD/MM/YYYY"
-        );
-        // this.newData0.selectedDate = time;
-        // console.log(this.newData0.selectedDate);
-        // console.log(this.day);
-        this.newData2.selectedDate = moment(time, "YYYY-MM-DD")
-          .add(1, "day")
-          .format("dddd" + " " + "DD/MM/YYYY");
-        // console.log(this.newData0.selectedDate);
-        // console.log(this.newData2.selectedDate);
-        this.newData3.selectedDate = moment(time, "YYYY-MM-DD")
-          .add(2, "day")
-          .format("dddd" + " " + "DD/MM/YYYY");
-        this.newData4.selectedDate = moment(time, "YYYY-MM-DD")
-          .add(3, "day")
-          .format("dddd" + " " + "DD/MM/YYYY");
-        this.newData5.selectedDate = moment(time, "YYYY-MM-DD")
-          .add(4, "day")
-          .format("dddd" + " " + "DD/MM/YYYY");
-        this.newData6.selectedDate = moment(time, "YYYY-MM-DD")
-          .add(5, "day")
-          .format("dddd" + " " + "DD/MM/YYYY");
-        this.newData7.selectedDate = moment(time, "YYYY-MM-DD")
-          .add(6, "day")
-          .format("dddd" + " " + "DD/MM/YYYY");
-      }
-
-      // time = time.split("-");
-      // day.set({
-      //   year: time[0],
-      //   month: time[1],
-      //   day: time[2]
-      // });
+      console.log(this.fetchDate);
+      axios
+        .post(this.baseURl + "Kitchen_menu/date", {
+          todo: this.fetchDate,
+          todo1: this.newData[0].userHotel
+        })
+        .then(response => {
+          console.log("response", response);
+          this.newData[0].selectedDate = this.fetchDate;
+          response.data.forEach((element, index) => {
+            if (element.meal_type === "breakfast") {
+              self.newData[0].meal_type.breakfast.items.push(element.item_name);
+            }
+            if (element.meal_type === "lunch") {
+              self.newData[0].meal_type.lunch.items.push(element.item_name);
+            }
+            if (element.meal_type === "dinner") {
+              self.newData[0].meal_type.dinner.items.push(element.item_name);
+            }
+          });
+        });
     },
     async getKitchenData() {
       this.todaydate = moment().format("YYYY-MM-DD");
-      console.log(this.todaydate);
-      const kitchenData = await axios.get(
-        this.baseURl + 'Zolo_city/userdata',
-      );
-      // var kitchencity = [];
-      this.kitchenNew = kitchenData;
-      // this.kitchenNewlength = this.kitchenNew.data.length;
-      for (var iter9 = 0; iter9 < this.kitchenNew.data.length; iter9++) {
-        this.kitchenName.push(this.kitchenNew.data[iter9].LOCALNAME);
+      for (var index = 0; index < 6; index++) {
+        this.newData.push({
+          meal_type: {
+            breakfast: { type: "breakfast", items: [] },
+            lunch: { type: "lunch", items: [] },
+            dinner: { type: "dinner", items: [] }
+          },
+          userCity: "",
+          userName: "",
+          userHotel: "",
+          selectedDate: "Date"
+        });
       }
-
-      const CityData = await axios.get(
-        this.baseURl + 'Zolo_city/userdatacity',
-      );
-
-      // this.cityNew = CityData.data;
-      for (var iter9 = 0; iter9 < CityData.data.length; iter9++) {
-        this.cityNew.push(CityData.data[iter9].CITY);
-      }
-      console.log("test", this.cityNew);
-      console.log(this.cityNew.length);
-      console.log(this.kitchenName);
-    },
-
-    async getAllData() {
-      const tableData = await axios.get(this.baseURl + 'Kitchen_menu');
-      const tableData3 = await axios.get(
-        this.baseURl + 'Kitchen_menu/getdistinct'
-      );
-      this.meow2 = tableData3.data;
-      // console.log("Distinct Dates", this.meow2);
-
-      this.data1 = tableData.data;
-      // console.log("data1", this.data1);
-
-      await this.updateData();
+      console.log("length of newData", this.newData.length);
+      axios.get(this.baseURl + "Zolo_city/userdata").then(response => {
+        var items = [];
+        response.data.forEach(element => {
+          items.push(element.CITY);
+          this.kitchenName.push(element.LOCALNAME);
+        });
+        this.cityNew = Array.from(new Set(items));
+      });
+      this.newData[0].selectedDate = this.date;
     }
   },
   created() {},
-  mounted() {
+  beforeMount() {
     this.getKitchenData();
   },
   computed: {
     formattedDate() {
       return moment().format("YYYY-MM-DD");
+    },
+    computedDateFormattedMomentjs() {
+      return this.date
+        ? moment(this.date).format("dddd" + " " + "DD/MM/YYYY")
+        : "";
     }
   }
 };
@@ -927,8 +458,8 @@ table {
   max-width: 70px;
   border: 0.1px solid rgb(68, 70, 95);
 }
-/* tr:nth-of-type(odd) { 
-	background: rgb(207, 38, 38); 
+/* tr:nth-of-type(odd) {
+	background: rgb(207, 38, 38);
 	} */
 
 th {
@@ -956,12 +487,12 @@ th {
     /* overflow: scroll; */
   }
   .input {
-  max-width: 70px;
-  border: 0.1px solid rgb(68, 70, 95);
-}
+    max-width: 70px;
+    border: 0.1px solid rgb(68, 70, 95);
+  }
 }
 
-/* 
+/*
 Max width before this PARTICULAR table gets nasty
 This query will take effect for any screen smaller than 760px
 and also iPads specifically.
