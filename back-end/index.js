@@ -93,21 +93,11 @@ const getDate = tableName => async (req, res) => {
 
 const getUserData = tableName => async (req, res) => {
   const userData = await query1(
-    `select DISTINCT CITY, LOCALNAME from ${tableName} where TYPE = "Property" AND Approved = 1`
+    `select DISTINCT CITY, LOCALNAME from ${tableName} where TYPE = "Kitchen"`
   );
   console.log(userData)
   res.json(userData);
 };
-
-const getKitchen = tableName => async (req, res) => {
-  assKitchen = req.body.propName;
-  console.log("assKitchen", assKitchen);
-  const kitName = await query(
-    `select Associated_Kitchen_Name from ${tableName} where Property_Name='${assKitchen}'`
-  );
-  res.json(kitName);
-};
-
 
 const getDistinctDates = tableName => async (req, res) => {
   const tableData3 = await query(
@@ -151,7 +141,6 @@ const insertTableRow = tableName => async (req, res) => {
  */
 
 const createTableBasicAPI = tableName => {
-  app.post(`/${tableName}/getkit`, getKitchen(`${tableName}`));
   app.post(`/${tableName}/date`, getDate(`${tableName}`));
   app.get(`/${tableName}/userdata`, getUserData(`${tableName}`));
   app.get(`/${tableName}/getdistinct`, getDistinctDates(`${tableName}`));
@@ -161,7 +150,6 @@ const createTableBasicAPI = tableName => {
 
 createTableBasicAPI("Kitchen_menu");
 createTableBasicAPI("Centers");
-createTableBasicAPI("Property_Kitchen_Map");
 
 app.use(staticFileMiddleware);
 

@@ -18,7 +18,6 @@
         v-model="userKitchen"
         :items="kitchenName"
         required
-        @input="assKitchenSel"
         label="User Property"
         outline
       ></v-select>
@@ -37,7 +36,6 @@
         <v-date-picker v-model="date" @change="fun3"></v-date-picker>
       </v-menu>
     </v-flex>
-    <v-flex sm12 md4>Your Kitchen Name is : {{assKitchenName}}</v-flex>
     <v-flex sm12 md4>
       <v-btn v-on:click="visible = true" @click="showResp()">Show Response</v-btn>
     </v-flex>
@@ -96,7 +94,6 @@ export default {
     return {
       // newData[0].userCity = '',
       userCity: "",
-      assKitchenName: "",
       cityNew: [],
       kitchenData: [],
       newData: [
@@ -130,16 +127,6 @@ export default {
       });
       console.log(this.kitchenName.length);
     },
-    assKitchenSel() {
-      axios
-        .post(this.baseURl + "Property_Kitchen_Map/getkit", {
-          propName: this.userKitchen
-        })
-        .then(response => {
-          this.assKitchenName = response.data[0].Associated_Kitchen_Name;
-          console.log("assKit", response);
-        });
-    },
     fun3() {
       this.menu3 = false;
       this.fetchDate = this.date;
@@ -162,7 +149,7 @@ export default {
       axios
         .post(this.baseURl + "Kitchen_menu/date", {
           todo: this.fetchDate,
-          todo1: this.assKitchenName
+          todo1: this.userKitchen
         })
         .then(response => {
           console.log("response", response);

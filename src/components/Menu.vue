@@ -27,13 +27,9 @@
                         v-model="newData[0].userHotel"
                         :items="kitchenName"
                         required
-                        @input="assKitchenSel"
                         label="User Kitchen"
                         outline
                       ></v-select>
-                    </v-flex>
-                    <v-flex sm12 md4>
-                      Your Kitchen Name is : {{assKitchenName}}
                     </v-flex>
                   </v-layout>
                 </v-container>
@@ -207,7 +203,7 @@ export default {
       menu2: false,
       menu3: false,
       date: new Date().toISOString().substr(0, 10),
-      baseURl: "http://3.218.108.144:4300/",
+      baseURl: "http://localhost:4300/",
       kitchenNew: [],
       todaydate: "",
       kitchenName: ['Please select a City First'],
@@ -233,7 +229,6 @@ export default {
         selectedDate: ""
       },
       kitchenData: [],
-      assKitchenName: '',
       newData: [
         {
           meal_type: {
@@ -260,16 +255,6 @@ export default {
         if (this.newData[0].userCity === element.CITY) this.kitchenName.push(element.LOCALNAME);
       });
       console.log(this.kitchenName.length);
-    },
-    assKitchenSel() {
-      axios
-        .post(this.baseURl + "Property_Kitchen_Map/getkit", {
-          propName: this.newData[0].userHotel
-        })
-        .then(response => {
-          this.assKitchenName = response.data[0].Associated_Kitchen_Name
-          console.log('assKit',response);
-        });
     },
     fun1() {
       this.menu1 = false;
@@ -300,7 +285,7 @@ export default {
       newData1.item_name = element1;
       newData1.userCity = this.newData[0].userCity;
       newData1.userName = this.newData[0].userName;
-      newData1.userHotel = this.assKitchenName;
+      newData1.userHotel = this.newData[0].userHotel;
       newData1.selectedDate = this.newData[0].selectedDate;
       return newData1;
     },
