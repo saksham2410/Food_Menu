@@ -1,5 +1,5 @@
 <template>
-  <v-app id="inspire">
+  <v-app id="inspire" :dark="dark">
     <v-navigation-drawer clipped fixed v-model="drawer" app>
       <v-list dense>
         <v-list-tile @click="create">
@@ -23,6 +23,13 @@
     <v-toolbar app fixed clipped-left>
       <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
       <v-toolbar-title>Zolo Menu</v-toolbar-title>
+      <v-spacer></v-spacer>
+      <v-spacer></v-spacer>
+      <v-spacer></v-spacer>
+      <v-spacer></v-spacer>
+      <v-spacer></v-spacer>
+      <v-spacer></v-spacer>
+      <v-switch v-model="dark" flex-center primary label="Dark Mode"></v-switch>
     </v-toolbar>
     <v-content>
       <v-container fluid fill-height>
@@ -42,29 +49,30 @@
 </template>
 
 <script>
-import Menu from "./components/Menu";
 import Create from "./components/Create";
+import View from "./components/View";
 
 export default {
   name: "App",
   components: {
-    Menu,
-    Create
+    Create,
+    View
   },
   data() {
     return {
-      drawer: true
+      drawer: false,
+      dark: false
     };
   },
   methods: {
     create() {
       this.$router.push({
-        name: "Menu"
+        name: "Create"
       });
     },
     view() {
       this.$router.push({
-        name: "Create"
+        name: "View"
       });
     }
   }
