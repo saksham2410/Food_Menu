@@ -67,7 +67,7 @@
                   </template>
                   <v-date-picker v-model="date" @change="fun2"></v-date-picker>
                 </v-menu>
-                <v-btn v-on:click="visible = true">Add Day</v-btn>
+                <v-btn v-on:click="dayAdd();">Add Day</v-btn>
               </v-flex>
             </v-layout>
 
@@ -203,9 +203,8 @@ export default {
       menu2: false,
       menu3: false,
       date: new Date().toISOString().substr(0, 10),
-      baseURl: "http://3.218.108.144:4300/",
+      baseURl: "http://http://3.218.108.144:4300/",
       kitchenNew: [],
-      todaydate: "",
       kitchenName: ['Please select a City First'],
       cityNew: [],
       day: "",
@@ -256,9 +255,26 @@ export default {
       });
       console.log(this.kitchenName.length);
     },
+    dayAdd() {
+       for (var index = 1; index < 6; index++) {
+         this.visible = true;
+        this.newData[index] = {
+          meal_type: {
+            breakfast: { type: "breakfast", items: [] },
+            lunch: { type: "lunch", items: [] },
+            dinner: { type: "dinner", items: [] }
+          },
+          userCity: "",
+          userName: "",
+          userHotel: "",
+          selectedDate: new Date().toISOString().substr(0, 10)
+        }
+      }
+    },
     fun1() {
       this.menu1 = false;
       this.newData[0].selectedDate = this.date;
+      console.log('fun1',this.date)
       this.setNewDate();
     },
     fun2() {
@@ -272,7 +288,7 @@ export default {
       this.fetchDate = this.date;
       this.setNewDate();
     },
-    testFun(element1, element2) {
+    testFun(element1, element2, element3) {
       var newData1 = {
         meal_type: "",
         item_name: "",
@@ -286,7 +302,7 @@ export default {
       newData1.userCity = this.newData[0].userCity;
       newData1.userName = this.newData[0].userName;
       newData1.userHotel = this.newData[0].userHotel;
-      newData1.selectedDate = this.newData[0].selectedDate;
+      newData1.selectedDate = element3;
       return newData1;
     },
     updateState() {
@@ -294,24 +310,28 @@ export default {
     },
     addNewTableElementBreakfast() {
       // if (this.visible) {
+        console.log('newData',this.newData)
         this.newData.forEach((element, index) => {
           element.meal_type.breakfast.items.forEach(element1 => {
+            // console.log(element.s)
             var response = this.testFun(
               element1,
-              element.meal_type.breakfast.type
+              element.meal_type.breakfast.type,
+              element.selectedDate
             );
             console.log(response);
             axios.post(this.baseURl + "Kitchen_menu/insert", response);
           });
           element.meal_type.lunch.items.forEach(element1 => {
-            var response = this.testFun(element1, element.meal_type.lunch.type);
+            var response = this.testFun(element1, element.meal_type.lunch.type, element.selectedDate);
             console.log(response);
             axios.post(this.baseURl + "Kitchen_menu/insert", response);
           });
           element.meal_type.dinner.items.forEach(element1 => {
             var response = this.testFun(
               element1,
-              element.meal_type.dinner.type
+              element.meal_type.dinner.type,
+              element.selectedDate
             );
             console.log(response);
             axios.post(this.baseURl + "Kitchen_menu/insert", response);
@@ -346,11 +366,10 @@ export default {
     },
     setDate() {},
     setNewDate() {
-      var time = this.newData[0].selectedDate;
+      // var time = this.newData[0].selectedDate;
       for (var i = 0; i < 7; i++) {
-        this.newData[i].selectedDate = moment(time, "YYYY-MM-DD")
-          .add(i, "day")
-          .format("dddd" + " " + "DD/MM/YYYY");
+        this.newData[i].selectedDate = moment(this.date).add(i, "day").format("dddd" + " " + "DD/MM/YYYY");
+          // .format("dddd" + " " + "DD/MM/YYYY");
       }
     },
     async getKitchenData() {
@@ -359,7 +378,6 @@ export default {
       this.kitchenData.data.forEach((element, index) => {
         this.cityNew.push(element.CITY);
       });
-      this.todaydate = moment().format("YYYY-MM-DD");
       for (var index = 0; index < 6; index++) {
         this.newData.push({
           meal_type: {
@@ -374,20 +392,21 @@ export default {
         });
       }
       console.log("length of newData", this.newData.length);
-      // axios.get(this.baseURl + "Zolo_city/userdata").then(response => {
-      //   var items = [];
-      //   response.data.forEach(element => {
-      //     items.push(element.CITY);
-      //     this.kitchenName.push(element.LOCALNAME);
-      //   });
-      //   this.cityNew = Array.from(new Set(items));
-      // });
-      this.newData[0].selectedDate = this.date;
+      this.newData[0].selectedDate = moment(this.date).format("dddd" + " " + "DD/MM/YYYY");
+    },
+    fixDate() {
+      console.log('initial',this.date)
+      this.newData[0].selectedDate = moment(this.date).format("dddd" + " " + "DD/MM/YYYY");
+      console.log(this.newData[0].selectedDate)
     }
   },
   created() {},
   beforeMount() {
     this.getKitchenData();
+  },
+  mounted() {
+    
+    this.fixDate();
   },
   computed: {
     formattedDate() {
