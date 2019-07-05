@@ -115,7 +115,7 @@ export default {
       fetchDate: "",
       userKitchen: "",
       date: new Date().toISOString().substr(0, 10),
-      baseURl: "http://3.218.108.144:4300/"
+      baseURl: "http://3.218.108.144:4300/",
     };
   },
   methods: {
@@ -136,7 +136,8 @@ export default {
       console.log(this.fetchDate);
     },
     async setValue() {
-      this.newData.selectedDate = moment(this.date).format("dddd" + " " + "DD/MM/YYYY")
+      this.newData[0].selectedDate = moment(this.date).format("dddd" + " " + "DD/MM/YYYY")
+      this.fetchDate = this.newData[0].selectedDate
       this.kitchenData = await axios.get(this.baseURl + "Centers/userdata");
       console.log("hi", this.kitchenData);
       this.kitchenData.data.forEach((element, index) => {
