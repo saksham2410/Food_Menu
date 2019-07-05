@@ -23,7 +23,7 @@
                       ></v-select>
                     </v-flex>
                     <v-flex sm12 md4>
-                      <v-autocomplete
+                      <!-- <v-autocomplete
                     v-model="newData[0].userHotel"
                     @input="assKitchenSel"
                     :items="kitchenName"
@@ -31,16 +31,16 @@
                     persistent-hint
                     prepend-icon="mdi-city"
                   >
-                  </v-autocomplete>
-                      <!-- <v-select
+                  </v-autocomplete> -->
+                      <v-select
                         v-model="newData[0].userHotel"
                         :items="kitchenName"
                         required
                         label="User Kitchen"
                         outline
-                      ></v-select> -->
+                      ></v-select>
                     </v-flex>
-                    Your associated Kitchen Name is : {{assKitchen}}
+                    <!-- Your associated Kitchen Name is : {{assKitchen}} -->
                   </v-layout>
                 </v-container>
               </v-form>
@@ -212,7 +212,7 @@ export default {
       menu1: false,
       menu2: false,
       menu3: false,
-      assKitchen: '',
+      // assKitchen: '',
       date: new Date().toISOString().substr(0, 10),
       baseURl: "http://3.218.108.144:4300/",
       kitchenNew: [],
@@ -252,18 +252,18 @@ export default {
   },
 
   methods: {
-    assKitchenSel() {
-      axios
-        .post(this.baseURl + "Property_Kitchen_Map/getkit", {
-          propName: this.newData[0].userHotel
-        })
-        .then(response => {
-          console.log('assKit',response);
-          this.assKitchen = response.data[0].Associated_Kitchen_Name
-          // 
-        });
-      // console.log('Hi')
-    },
+    // assKitchenSel() {
+    //   axios
+    //     .post(this.baseURl + "Property_Kitchen_Map/getkit", {
+    //       propName: this.newData[0].userHotel
+    //     })
+    //     .then(response => {
+    //       console.log('assKit',response);
+    //       this.assKitchen = response.data[0].Associated_Kitchen_Name
+    //       // 
+    //     });
+    //   // console.log('Hi')
+    // },
 
     kitchenSelect() {
       this.kitchenName = [];
@@ -313,7 +313,7 @@ export default {
         userName: "",
         property: "",
         selectedDate: "",
-        kitchen: ''
+        // kitchen: ''
       };
       newData1.meal_type = element2;
       newData1.item_name = element1;
@@ -321,7 +321,7 @@ export default {
       newData1.userName = this.newData[0].userName;
       newData1.property = this.newData[0].userHotel;
       newData1.selectedDate = element3;
-      newData1.kitchen = this.assKitchen;
+      // newData1.kitchen = this.assKitchen;
       return newData1;
     },
     updateState() {
@@ -385,7 +385,7 @@ export default {
           console.log(response)
           response.data.forEach(element => {
             self.meow2[0].date.push(element.daily_date);
-            self.meow2[0].prop.push(element.Property)
+            self.meow2[0].prop.push(element.Kitchen)
           });
           console.log(self.meow2[0]);
         });
