@@ -23,14 +23,24 @@
                       ></v-select>
                     </v-flex>
                     <v-flex sm12 md4>
-                      <v-select
+                      <v-autocomplete
+                    v-model="newData[0].userHotel"
+                    @input="assKitchenSel"
+                    :items="kitchenName"
+                    :label="`User Property`"
+                    persistent-hint
+                    prepend-icon="mdi-city"
+                  >
+                  </v-autocomplete>
+                      <!-- <v-select
                         v-model="newData[0].userHotel"
                         :items="kitchenName"
                         required
                         label="User Kitchen"
                         outline
-                      ></v-select>
+                      ></v-select> -->
                     </v-flex>
+                    Your associated Kitchen Name is : {{assKitchen}}
                   </v-layout>
                 </v-container>
               </v-form>
@@ -202,8 +212,9 @@ export default {
       menu1: false,
       menu2: false,
       menu3: false,
+      assKitchen: '',
       date: new Date().toISOString().substr(0, 10),
-      baseURl: "http://http://3.218.108.144:4300/",
+      baseURl: "http://3.218.108.144:4300/",
       kitchenNew: [],
       kitchenName: ['Please select a City First'],
       cityNew: [],
@@ -213,20 +224,13 @@ export default {
       visible: true,
       moment: moment,
       data: {},
-      meow2: [],
+      meow2: [ {date: [], prop: []} ],
+      // meow3: [],
       breakdata: [],
       lunchdata: [],
       dinnerdata: [],
       items: { breakfast: [], lunch: [], dinner: [] },
       meal_type: ["Breakfast", "Lunch", "Dinner"],
-      data1: {
-        meal_type: "",
-        item_name: "",
-        userCity: "",
-        userName: "",
-        userHotel: "",
-        selectedDate: ""
-      },
       kitchenData: [],
       newData: [
         {
@@ -248,6 +252,19 @@ export default {
   },
 
   methods: {
+    assKitchenSel() {
+      axios
+        .post(this.baseURl + "Property_Kitchen_Map/getkit", {
+          propName: this.newData[0].userHotel
+        })
+        .then(response => {
+          console.log('assKit',response);
+          this.assKitchen = response.data[0].Associated_Kitchen_Name
+          // 
+        });
+      // console.log('Hi')
+    },
+
     kitchenSelect() {
       this.kitchenName = [];
       this.kitchenData.data.forEach((element, index) => {
@@ -294,15 +311,17 @@ export default {
         item_name: "",
         userCity: "",
         userName: "",
-        userHotel: "",
-        selectedDate: ""
+        property: "",
+        selectedDate: "",
+        kitchen: ''
       };
       newData1.meal_type = element2;
       newData1.item_name = element1;
       newData1.userCity = this.newData[0].userCity;
       newData1.userName = this.newData[0].userName;
-      newData1.userHotel = this.newData[0].userHotel;
+      newData1.property = this.newData[0].userHotel;
       newData1.selectedDate = element3;
+      newData1.kitchen = this.assKitchen;
       return newData1;
     },
     updateState() {
@@ -340,13 +359,20 @@ export default {
       this.successtext = "Added";
     },
     async updateData() {
-      this.meow2.forEach((element, index) => {
+      this.meow2[0].date.forEach((element, index) => {
         if (this.newData[0].selectedDate === element) {
-          axios
+          console.log(element)
+          this.meow2[0].prop.forEach((ele1, ind1) => {
+            if(this.newData[0].userHotel === ele1)
+            {
+              axios
             .delete(this.baseURl + "Kitchen_menu/delete", {
-              data: { id: this.newData[0].selectedDate }
+              data: { id: this.newData[0].selectedDate, id1: this.newData[0].userHotel }
             })
             .then(response => {});
+              console.log (ele1 + element)
+            }
+          })
         }
       });
       await this.addNewTableElementBreakfast();
@@ -356,10 +382,12 @@ export default {
       await axios
         .get(this.baseURl + "Kitchen_menu/getdistinct")
         .then(response => {
+          console.log(response)
           response.data.forEach(element => {
-            self.meow2.push(element.daily_date);
+            self.meow2[0].date.push(element.daily_date);
+            self.meow2[0].prop.push(element.Property)
           });
-          console.log(self.meow2);
+          console.log(self.meow2[0]);
         });
 
       await this.updateData();
