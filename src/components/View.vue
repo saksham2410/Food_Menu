@@ -136,6 +136,7 @@ export default {
       console.log(this.fetchDate);
     },
     async setValue() {
+      this.newData.selectedDate = moment(this.date).format("dddd" + " " + "DD/MM/YYYY")
       this.kitchenData = await axios.get(this.baseURl + "Centers/userdata");
       console.log("hi", this.kitchenData);
       this.kitchenData.data.forEach((element, index) => {
@@ -143,6 +144,19 @@ export default {
       });
     },
     showResp() {
+      this.newData =  [
+        {
+          meal_type: {
+            breakfast: { type: "breakfast", items: [] },
+            lunch: { type: "lunch", items: [] },
+            dinner: { type: "dinner", items: [] }
+          },
+          userCity: "",
+          userName: "",
+          userHotel: "",
+          selectedDate: this.fetchDate
+        }
+      ];
       const self = this;
       var time1 = this.fetchDate;
       console.log("time1", time1);
@@ -174,7 +188,7 @@ export default {
         : "";
     }
   },
-  beforeMount() {
+  mounted() {
     this.setValue();
   }
 };
