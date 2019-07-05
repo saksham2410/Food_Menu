@@ -77,7 +77,7 @@ const getDate = tableName => async (req, res) => {
   console.log("fetchDate", meow);
   console.log("fetchcity", meoww);
   const tableData1 = await query(
-    `select * from ${tableName} where daily_date='${meow}' and userhotel='${meoww}'`
+    `select * from ${tableName} where daily_date='${meow}' and Kitchen='${meoww}'`
   );
   console.log("suthar", tableData1);
   res.json(tableData1);
@@ -90,19 +90,19 @@ const getDate = tableName => async (req, res) => {
 //   console.log(userData);
 //   res.json(userData);
 // };
-const getKitchen = tableName => async (req, res) => {
-  var assKitchen = req.body.propName;
-  console.log("assKitchen", assKitchen);
-  const kitName = await query(
-    `select Associated_Kitchen_Name from ${tableName} where Property_Name='${assKitchen}'`
-  );
-  res.json(kitName);
-};
+// const getKitchen = tableName => async (req, res) => {
+//   var assKitchen = req.body.propName;
+//   console.log("assKitchen", assKitchen);
+//   const kitName = await query(
+//     `select Associated_Kitchen_Name from ${tableName} where Property_Name='${assKitchen}'`
+//   );
+//   res.json(kitName);
+// };
 
 
 const getUserData = tableName => async (req, res) => {
   const userData = await query1(
-    `select DISTINCT CITY, LOCALNAME from ${tableName} where TYPE = "Property"`
+    `select DISTINCT CITY, LOCALNAME from ${tableName} where TYPE = "Kitchen"`
   );
   console.log(userData)
   res.json(userData);
@@ -110,7 +110,7 @@ const getUserData = tableName => async (req, res) => {
 
 const getDistinctDates = tableName => async (req, res) => {
   const tableData3 = await query(
-    `select DISTINCT daily_date, Property from ${tableName}`
+    `select DISTINCT daily_date, Kitchen from ${tableName}`
   );
   res.json(tableData3);
 };
@@ -123,7 +123,7 @@ const deleteTableRow = tableName => async (req, res) => {
   console.log('del1',req.body.id);
   console.log('del2',req.body.id1);
   const deletedRow = await query(
-    `delete from ${tableName} where daily_date='${req.body.id}' and Property='${req.body.id1}'`
+    `delete from ${tableName} where daily_date='${req.body.id}' and Kitchen='${req.body.id1}'`
   );
   res.json(deletedRow);
 };
@@ -151,7 +151,7 @@ const insertTableRow = tableName => async (req, res) => {
  */
 
 const createTableBasicAPI = tableName => {
-  app.post(`/${tableName}/getkit`, getKitchen(`${tableName}`));
+  // app.post(`/${tableName}/getkit`, getKitchen(`${tableName}`));
   app.post(`/${tableName}/date`, getDate(`${tableName}`));
   app.get(`/${tableName}/userdata`, getUserData(`${tableName}`));
   app.get(`/${tableName}/getdistinct`, getDistinctDates(`${tableName}`));
@@ -161,7 +161,7 @@ const createTableBasicAPI = tableName => {
 
 createTableBasicAPI("Kitchen_menu");
 createTableBasicAPI("Centers");
-createTableBasicAPI("Property_Kitchen_Map");
+// createTableBasicAPI("Property_Kitchen_Map");
 
 app.use(staticFileMiddleware);
 
